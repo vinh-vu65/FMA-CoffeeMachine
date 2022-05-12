@@ -2,6 +2,6 @@ namespace CoffeeMachine.Code;
 
 public interface IDrink
 {
-    public string DrinkCode { get; set; }
+    public Products DrinkType { get; set; }
     public int Sugars { get; set; }
 }
