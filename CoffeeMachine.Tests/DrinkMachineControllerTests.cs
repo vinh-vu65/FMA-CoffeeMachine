@@ -37,4 +37,17 @@ public class DrinkMachineControllerTests
         
         Assert.StartsWith($"{_drink.DrinkCode}:{_drink.Sugars}", _sut.DrinkMakerProtocol);
     }
+    
+    [Theory]
+    [InlineData(99)]
+    [InlineData(1)]
+    public void CreateDrinkMakerProtocol_ShouldUpdateDrinkMakerProtocolWithOneAtTheEnd_WhenDrinkOrderContainsSugar(int sugarQuantity)
+    {
+        _drink.DrinkCode = "A";
+        _drink.Sugars = sugarQuantity;
+        
+        _sut.CreateDrinkMakerProtocol(_drink);
+        
+        Assert.Equal($"{_drink.DrinkCode}:{_drink.Sugars}:1", _sut.DrinkMakerProtocol);
+    }
 }
