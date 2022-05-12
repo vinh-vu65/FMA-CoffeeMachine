@@ -50,4 +50,15 @@ public class DrinkMachineControllerTests
         
         Assert.Equal($"{_drink.DrinkCode}:{_drink.Sugars}:1", _sut.DrinkMakerProtocol);
     }
+    
+    [Fact]
+    public void CreateDrinkMakerProtocol_ShouldUpdateDrinkMakerProtocolWithZeroAtTheEnd_WhenDrinkOrderContainsNoSugar()
+    {
+        _drink.DrinkCode = "A";
+        _drink.Sugars = 0;
+        
+        _sut.CreateDrinkMakerProtocol(_drink);
+        
+        Assert.Equal($"{_drink.DrinkCode}:{_drink.Sugars}:0", _sut.DrinkMakerProtocol);
+    }
 }
