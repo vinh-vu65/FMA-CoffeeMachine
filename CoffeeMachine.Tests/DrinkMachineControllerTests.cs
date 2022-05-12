@@ -61,4 +61,16 @@ public class DrinkMachineControllerTests
         
         Assert.Equal($"{_drink.DrinkCode}:{_drink.Sugars}:0", _sut.DrinkMakerProtocol);
     }
+
+    [Theory]
+    [InlineData("This is a message")]
+    [InlineData("This should display on drink maker")]
+    public void CreateDrinkMakerProtocol_ShouldUpdateDrinkMakerProtocolWithAMessage_WhenMessageIsGiven(string message)
+    {
+        var messageToDisplay = message;
+        
+        _sut.CreateDrinkMakerProtocol(messageToDisplay);
+        
+        Assert.Equal($"M:{message}", _sut.DrinkMakerProtocol);
+    }
 }
