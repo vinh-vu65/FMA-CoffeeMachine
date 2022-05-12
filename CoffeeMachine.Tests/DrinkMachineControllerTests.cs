@@ -77,4 +77,14 @@ public class DrinkMachineControllerTests
         
         Assert.Equal($"M:{message}", _sut.DrinkMakerProtocol);
     }
+
+    [Fact]
+    public void MatchDrinkCode_ShouldUseDrinkCatalogToMatchDrinkCode()
+    {
+        _catalog.MatchDrinkCode(Arg.Any<IDrink>()).Returns("A");
+        
+        _sut.MatchDrinkCode(_drink);
+
+        _catalog.Received(1).MatchDrinkCode(_drink);
+    }
 }
