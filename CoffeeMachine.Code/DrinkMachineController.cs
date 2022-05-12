@@ -6,6 +6,6 @@ public class DrinkMachineController
     
     public void CreateDrinkMakerProtocol(IDrink drinkRequested)
     {
-        DrinkMakerProtocol = drinkRequested.DrinkCode;
+        DrinkMakerProtocol = $"{drinkRequested.DrinkCode}:{drinkRequested.Sugars}";
     }
 }
