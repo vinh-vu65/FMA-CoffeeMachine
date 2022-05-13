@@ -1,3 +1,5 @@
+using CoffeeMachine.Code.Interfaces;
+
 namespace CoffeeMachine.Code;
 
 public class DrinkOrder : IDrink

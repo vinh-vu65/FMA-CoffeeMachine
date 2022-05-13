@@ -1,3 +1,5 @@
+using CoffeeMachine.Code.Interfaces;
+
 namespace CoffeeMachine.Code;
 
 public class DrinksCatalog : IDrinksCatalog
@@ -21,11 +23,4 @@ public class DrinksCatalog : IDrinksCatalog
             .Select(d => d.Value)
             .First();
     }
-}
-
-public enum Products
-{
-    Coffee,
-    HotChocolate,
-    Tea
 }

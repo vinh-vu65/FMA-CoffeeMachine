@@ -1,4 +1,4 @@
-namespace CoffeeMachine.Code;
+namespace CoffeeMachine.Code.Interfaces;
 
 public interface IDrinksCatalog
 { 

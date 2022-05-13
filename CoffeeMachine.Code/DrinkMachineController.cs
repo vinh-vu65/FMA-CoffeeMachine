@@ -1,8 +1,10 @@
+using CoffeeMachine.Code.Interfaces;
+
 namespace CoffeeMachine.Code;
 
 public class DrinkMachineController
 {
-    public string DrinkMakerProtocol { get; set; }
+    public string DrinkMakerProtocol { get; private set; }
     public string DrinkCode { get; private set; }
     private readonly IDrinksCatalog _catalog;
 
