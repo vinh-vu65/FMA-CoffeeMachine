@@ -20,11 +20,11 @@ public class DrinksCatalogTests
     [InlineData(Products.HotChocolate, "H")]
     [InlineData(Products.Tea, "T")]
 
-    public void MatchDrinkCode_ShouldReturnDrinkCode_WhenDrinkTypesMatchInOrderAndCatalog(Products drinkType, string expectedCode)
+    public void GetDrinkCode_ShouldReturnDrinkCode_WhenDrinkTypesMatchInOrderAndCatalog(Products drinkType, string expectedCode)
     {
         _drink.DrinkType = drinkType;
         
-        var result = _sut.MatchDrinkCode(_drink);
+        var result = _sut.GetDrinkCode(_drink);
         
         Assert.Equal(expectedCode, result);
     }

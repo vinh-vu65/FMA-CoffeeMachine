@@ -16,7 +16,7 @@ public class DrinksCatalog : IDrinksCatalog
         };
     }
 
-    public string MatchDrinkCode(IDrink drinkRequested)
+    public string GetDrinkCode(IDrink drinkRequested)
     {
         return Catalog
             .Where(d => d.Key == drinkRequested.DrinkType)

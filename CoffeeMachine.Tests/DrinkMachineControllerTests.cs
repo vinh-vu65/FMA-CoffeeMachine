@@ -21,8 +21,8 @@ public class DrinkMachineControllerTests
     [InlineData("test")]
     public void CreateDrinkMakerProtocol_ShouldUpdateDrinkMakerProtocolWithDrinkCode_WhenDrinkOrderIsGiven(string drinkCode)
     {
-        _catalog.MatchDrinkCode(Arg.Any<IDrink>()).Returns(drinkCode);
-        _sut.MatchDrinkCode(_drink);
+        _catalog.GetDrinkCode(Arg.Any<IDrink>()).Returns(drinkCode);
+        _sut.SetDrinkCode(_drink);
 
         _sut.CreateDrinkMakerProtocol(_drink);
         
@@ -35,7 +35,7 @@ public class DrinkMachineControllerTests
     [InlineData(1)]
     public void CreateDrinkMakerProtocol_ShouldUpdateDrinkMakerProtocolWithSugarAmount_WhenDrinkOrderIsGiven(int sugarQuantity)
     {
-        _catalog.MatchDrinkCode(Arg.Any<IDrink>()).Returns("A");
+        _catalog.GetDrinkCode(Arg.Any<IDrink>()).Returns("A");
         _drink.Sugars = sugarQuantity;
         
         _sut.CreateDrinkMakerProtocol(_drink);
@@ -48,7 +48,7 @@ public class DrinkMachineControllerTests
     [InlineData(1)]
     public void CreateDrinkMakerProtocol_ShouldUpdateDrinkMakerProtocolWithOneAtTheEnd_WhenDrinkOrderContainsSugar(int sugarQuantity)
     {
-        _catalog.MatchDrinkCode(Arg.Any<IDrink>()).Returns("A");
+        _catalog.GetDrinkCode(Arg.Any<IDrink>()).Returns("A");
         _drink.Sugars = sugarQuantity;
         
         _sut.CreateDrinkMakerProtocol(_drink);
@@ -59,7 +59,7 @@ public class DrinkMachineControllerTests
     [Fact]
     public void CreateDrinkMakerProtocol_ShouldUpdateDrinkMakerProtocolWithZeroAtTheEnd_WhenDrinkOrderContainsNoSugar()
     {
-        _catalog.MatchDrinkCode(Arg.Any<IDrink>()).Returns("A");
+        _catalog.GetDrinkCode(Arg.Any<IDrink>()).Returns("A");
         _drink.Sugars = 0;
         
         _sut.CreateDrinkMakerProtocol(_drink);
@@ -80,12 +80,12 @@ public class DrinkMachineControllerTests
     }
 
     [Fact]
-    public void MatchDrinkCode_ShouldUseDrinkCatalogToMatchDrinkCode()
+    public void SetDrinkCode_ShouldUseDrinkCatalogToMatchDrinkCode()
     {
-        _catalog.MatchDrinkCode(Arg.Any<IDrink>()).Returns("A");
+        _catalog.GetDrinkCode(Arg.Any<IDrink>()).Returns("A");
         
-        _sut.MatchDrinkCode(_drink);
+        _sut.SetDrinkCode(_drink);
 
-        _catalog.Received(1).MatchDrinkCode(_drink);
+        _catalog.Received(1).GetDrinkCode(_drink);
     }
 }

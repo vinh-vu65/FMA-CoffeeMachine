@@ -13,9 +13,9 @@ public class DrinkMachineController
         _catalog = catalog;
     }
     
-    public void MatchDrinkCode(IDrink drinkRequested)
+    public void SetDrinkCode(IDrink drinkRequested)
     {
-        DrinkCode = _catalog.MatchDrinkCode(drinkRequested);
+        DrinkCode = _catalog.GetDrinkCode(drinkRequested);
     }
     
     public void CreateDrinkMakerProtocol(IDrink drinkRequested)
