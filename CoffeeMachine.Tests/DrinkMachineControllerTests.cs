@@ -105,6 +105,7 @@ public class DrinkMachineControllerTests
     {
         var sampleRecord = new CatalogRecord(Products.Coffee, "A", 0);
         _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
+        _sut.GetCatalogRecord(_drink);
 
         var result = _sut.HasSufficientMoney(moneyInserted);
         

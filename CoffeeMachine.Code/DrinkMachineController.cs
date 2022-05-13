@@ -17,6 +17,11 @@ public class DrinkMachineController
     {
         DrinkInfo = _catalog.QueryCatalog(drinkRequested);
     }
+
+    public bool HasSufficientMoney(double moneyInserted)
+    {
+        return moneyInserted > DrinkInfo.Price;
+    }
     
     public void CreateDrinkMakerProtocol(IDrink drinkRequested)
     {
