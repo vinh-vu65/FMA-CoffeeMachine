@@ -23,11 +23,11 @@ public class DrinkMachineControllerTests
     {
         var sampleRecord = new CatalogRecord(Products.Coffee, drinkCode, 0);
         _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
-        _sut.SetDrinkCode(_drink);
+        _sut.GetCatalogRecord(_drink);
 
         _sut.CreateDrinkMakerProtocol(_drink);
         
-        Assert.StartsWith(_sut.DrinkCode, _sut.DrinkMakerProtocol);
+        Assert.StartsWith(_sut.DrinkInfo.DrinkCode, _sut.DrinkMakerProtocol);
     }
 
     [Theory]
@@ -39,10 +39,11 @@ public class DrinkMachineControllerTests
         var sampleRecord = new CatalogRecord(Products.Coffee, "A", 0);
         _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
         _drink.Sugars = sugarQuantity;
+        _sut.GetCatalogRecord(_drink);
         
         _sut.CreateDrinkMakerProtocol(_drink);
         
-        Assert.StartsWith($"{_sut.DrinkCode}:{_drink.Sugars}", _sut.DrinkMakerProtocol);
+        Assert.StartsWith($"{_sut.DrinkInfo.DrinkCode}:{_drink.Sugars}", _sut.DrinkMakerProtocol);
     }
     
     [Theory]
@@ -53,10 +54,11 @@ public class DrinkMachineControllerTests
         var sampleRecord = new CatalogRecord(Products.Coffee, "A", 0);
         _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
         _drink.Sugars = sugarQuantity;
-        
+        _sut.GetCatalogRecord(_drink);
+
         _sut.CreateDrinkMakerProtocol(_drink);
         
-        Assert.Equal($"{_sut.DrinkCode}:{_drink.Sugars}:1", _sut.DrinkMakerProtocol);
+        Assert.Equal($"{_sut.DrinkInfo.DrinkCode}:{_drink.Sugars}:1", _sut.DrinkMakerProtocol);
     }
     
     [Fact]
@@ -65,10 +67,11 @@ public class DrinkMachineControllerTests
         var sampleRecord = new CatalogRecord(Products.Coffee, "A", 0);
         _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
         _drink.Sugars = 0;
-        
+        _sut.GetCatalogRecord(_drink);
+
         _sut.CreateDrinkMakerProtocol(_drink);
         
-        Assert.Equal($"{_sut.DrinkCode}:{_drink.Sugars}:0", _sut.DrinkMakerProtocol);
+        Assert.Equal($"{_sut.DrinkInfo.DrinkCode}:{_drink.Sugars}:0", _sut.DrinkMakerProtocol);
     }
 
     [Theory]
@@ -89,7 +92,7 @@ public class DrinkMachineControllerTests
         var sampleRecord = new CatalogRecord(Products.Coffee, "A", 0);
         _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
         
-        _sut.SetDrinkCode(_drink);
+        _sut.GetCatalogRecord(_drink);
 
         _catalog.Received(1).QueryCatalog(_drink);
     }
