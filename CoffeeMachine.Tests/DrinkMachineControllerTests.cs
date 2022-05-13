@@ -21,7 +21,8 @@ public class DrinkMachineControllerTests
     [InlineData("test")]
     public void CreateDrinkMakerProtocol_ShouldUpdateDrinkMakerProtocolWithDrinkCode_WhenDrinkOrderIsGiven(string drinkCode)
     {
-        _catalog.GetDrinkCode(Arg.Any<IDrink>()).Returns(drinkCode);
+        var sampleRecord = new CatalogRecord(Products.Coffee, drinkCode);
+        _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
         _sut.SetDrinkCode(_drink);
 
         _sut.CreateDrinkMakerProtocol(_drink);
@@ -35,7 +36,8 @@ public class DrinkMachineControllerTests
     [InlineData(1)]
     public void CreateDrinkMakerProtocol_ShouldUpdateDrinkMakerProtocolWithSugarAmount_WhenDrinkOrderIsGiven(int sugarQuantity)
     {
-        _catalog.GetDrinkCode(Arg.Any<IDrink>()).Returns("A");
+        var sampleRecord = new CatalogRecord(Products.Coffee, "A");
+        _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
         _drink.Sugars = sugarQuantity;
         
         _sut.CreateDrinkMakerProtocol(_drink);
@@ -48,7 +50,8 @@ public class DrinkMachineControllerTests
     [InlineData(1)]
     public void CreateDrinkMakerProtocol_ShouldUpdateDrinkMakerProtocolWithOneAtTheEnd_WhenDrinkOrderContainsSugar(int sugarQuantity)
     {
-        _catalog.GetDrinkCode(Arg.Any<IDrink>()).Returns("A");
+        var sampleRecord = new CatalogRecord(Products.Coffee, "A");
+        _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
         _drink.Sugars = sugarQuantity;
         
         _sut.CreateDrinkMakerProtocol(_drink);
@@ -59,7 +62,8 @@ public class DrinkMachineControllerTests
     [Fact]
     public void CreateDrinkMakerProtocol_ShouldUpdateDrinkMakerProtocolWithZeroAtTheEnd_WhenDrinkOrderContainsNoSugar()
     {
-        _catalog.GetDrinkCode(Arg.Any<IDrink>()).Returns("A");
+        var sampleRecord = new CatalogRecord(Products.Coffee, "A");
+        _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
         _drink.Sugars = 0;
         
         _sut.CreateDrinkMakerProtocol(_drink);
@@ -82,10 +86,11 @@ public class DrinkMachineControllerTests
     [Fact]
     public void SetDrinkCode_ShouldUseDrinkCatalogToMatchDrinkCode()
     {
-        _catalog.GetDrinkCode(Arg.Any<IDrink>()).Returns("A");
+        var sampleRecord = new CatalogRecord(Products.Coffee, "A");
+        _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
         
         _sut.SetDrinkCode(_drink);
 
-        _catalog.Received(1).GetDrinkCode(_drink);
+        _catalog.Received(1).QueryCatalog(_drink);
     }
 }

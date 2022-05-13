@@ -15,7 +15,7 @@ public class DrinkMachineController
     
     public void SetDrinkCode(IDrink drinkRequested)
     {
-        DrinkCode = _catalog.GetDrinkCode(drinkRequested);
+        DrinkCode = _catalog.QueryCatalog(drinkRequested).DrinkCode;
     }
     
     public void CreateDrinkMakerProtocol(IDrink drinkRequested)

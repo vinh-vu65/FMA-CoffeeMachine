@@ -4,23 +4,21 @@ namespace CoffeeMachine.Code;
 
 public class DrinksCatalog : IDrinksCatalog
 {
-    public Dictionary<Products, string> Catalog { get; set; }
+    public CatalogRecord[] Catalog { get; set; }
 
     public DrinksCatalog()
     {
-        Catalog = new Dictionary<Products, string>
+        Catalog = new CatalogRecord[]
         {
-            {Products.Coffee, "C"},
-            {Products.HotChocolate, "H"},
-            {Products.Tea, "T"}
+            new(Products.Coffee, "C"),
+            new(Products.HotChocolate, "H"),
+            new(Products.Tea, "T")
         };
     }
 
-    public string GetDrinkCode(IDrink drinkRequested)
+    public CatalogRecord QueryCatalog(IDrink drinkRequested)
     {
         return Catalog
-            .Where(d => d.Key == drinkRequested.DrinkType)
-            .Select(d => d.Value)
-            .First();
+            .First(d => d.DrinkType == drinkRequested.DrinkType);
     }
 }

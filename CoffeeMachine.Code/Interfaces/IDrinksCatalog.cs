@@ -2,6 +2,6 @@ namespace CoffeeMachine.Code.Interfaces;
 
 public interface IDrinksCatalog
 { 
-    Dictionary<Products, string> Catalog { get; set; }
-    string GetDrinkCode(IDrink drinkRequested);
+    CatalogRecord[] Catalog { get; set; }
+    CatalogRecord QueryCatalog(IDrink drinkRequested);
 }
