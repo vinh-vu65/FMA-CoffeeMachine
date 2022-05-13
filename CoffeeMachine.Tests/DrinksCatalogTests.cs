@@ -30,11 +30,11 @@ public class DrinksCatalogTests
     }
     
     [Theory]
-    [InlineData(Products.Coffee, 5.5m)]
-    [InlineData(Products.HotChocolate, 6m)]
-    [InlineData(Products.Tea, 4m)]
+    [InlineData(Products.Coffee, Constants.CoffeePrice)]
+    [InlineData(Products.HotChocolate, Constants.HotChocPrice)]
+    [InlineData(Products.Tea, Constants.TeaPrice)]
 
-    public void QueryCatalog_ShouldReturnCatalogRecordWithMatchingPrice_WhenDrinkTypesMatchInOrderAndCatalog(Products drinkType, decimal expectedPrice)
+    public void QueryCatalog_ShouldReturnCatalogRecordWithMatchingPrice_WhenDrinkTypesMatchInOrderAndCatalog(Products drinkType, double expectedPrice)
     {
         _drink.DrinkType = drinkType;
         

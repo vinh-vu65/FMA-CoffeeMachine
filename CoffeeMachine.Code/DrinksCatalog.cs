@@ -10,9 +10,9 @@ public class DrinksCatalog : IDrinksCatalog
     {
         Catalog = new CatalogRecord[]
         {
-            new(Products.Coffee, "C"),
-            new(Products.HotChocolate, "H"),
-            new(Products.Tea, "T")
+            new(Products.Coffee, "C", Constants.CoffeePrice),
+            new(Products.HotChocolate, "H", Constants.HotChocPrice),
+            new(Products.Tea, "T", Constants.TeaPrice)
         };
     }
 

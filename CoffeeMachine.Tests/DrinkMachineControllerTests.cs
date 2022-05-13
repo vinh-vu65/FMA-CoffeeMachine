@@ -21,7 +21,7 @@ public class DrinkMachineControllerTests
     [InlineData("test")]
     public void CreateDrinkMakerProtocol_ShouldUpdateDrinkMakerProtocolWithDrinkCode_WhenDrinkOrderIsGiven(string drinkCode)
     {
-        var sampleRecord = new CatalogRecord(Products.Coffee, drinkCode);
+        var sampleRecord = new CatalogRecord(Products.Coffee, drinkCode, 0);
         _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
         _sut.SetDrinkCode(_drink);
 
@@ -36,7 +36,7 @@ public class DrinkMachineControllerTests
     [InlineData(1)]
     public void CreateDrinkMakerProtocol_ShouldUpdateDrinkMakerProtocolWithSugarAmount_WhenDrinkOrderIsGiven(int sugarQuantity)
     {
-        var sampleRecord = new CatalogRecord(Products.Coffee, "A");
+        var sampleRecord = new CatalogRecord(Products.Coffee, "A", 0);
         _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
         _drink.Sugars = sugarQuantity;
         
@@ -50,7 +50,7 @@ public class DrinkMachineControllerTests
     [InlineData(1)]
     public void CreateDrinkMakerProtocol_ShouldUpdateDrinkMakerProtocolWithOneAtTheEnd_WhenDrinkOrderContainsSugar(int sugarQuantity)
     {
-        var sampleRecord = new CatalogRecord(Products.Coffee, "A");
+        var sampleRecord = new CatalogRecord(Products.Coffee, "A", 0);
         _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
         _drink.Sugars = sugarQuantity;
         
@@ -62,7 +62,7 @@ public class DrinkMachineControllerTests
     [Fact]
     public void CreateDrinkMakerProtocol_ShouldUpdateDrinkMakerProtocolWithZeroAtTheEnd_WhenDrinkOrderContainsNoSugar()
     {
-        var sampleRecord = new CatalogRecord(Products.Coffee, "A");
+        var sampleRecord = new CatalogRecord(Products.Coffee, "A", 0);
         _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
         _drink.Sugars = 0;
         
@@ -86,7 +86,7 @@ public class DrinkMachineControllerTests
     [Fact]
     public void SetDrinkCode_ShouldUseDrinkCatalogToMatchDrinkCode()
     {
-        var sampleRecord = new CatalogRecord(Products.Coffee, "A");
+        var sampleRecord = new CatalogRecord(Products.Coffee, "A", 0);
         _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
         
         _sut.SetDrinkCode(_drink);
