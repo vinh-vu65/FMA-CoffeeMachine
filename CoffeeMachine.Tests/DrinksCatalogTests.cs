@@ -28,4 +28,18 @@ public class DrinksCatalogTests
         
         Assert.Equal(expectedCode, result.DrinkCode);
     }
+    
+    [Theory]
+    [InlineData(Products.Coffee, 5.5m)]
+    [InlineData(Products.HotChocolate, 6m)]
+    [InlineData(Products.Tea, 4m)]
+
+    public void QueryCatalog_ShouldReturnCatalogRecordWithMatchingPrice_WhenDrinkTypesMatchInOrderAndCatalog(Products drinkType, decimal expectedPrice)
+    {
+        _drink.DrinkType = drinkType;
+        
+        var result = _sut.QueryCatalog(_drink);
+        
+        Assert.Equal(expectedPrice, result.Price);
+    }
 }
