@@ -96,4 +96,18 @@ public class DrinkMachineControllerTests
 
         _catalog.Received(1).QueryCatalog(_drink);
     }
+
+    [Theory]
+    [InlineData(1.0)]
+    [InlineData(10)]
+    [InlineData(0.1)]
+    public void HasSufficientMoney_ShouldReturnTrue_WhenInsertedMoneyIsGreaterThanDrinkPrice(double moneyInserted)
+    {
+        var sampleRecord = new CatalogRecord(Products.Coffee, "A", 0);
+        _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
+
+        var result = _sut.HasSufficientMoney(moneyInserted);
+        
+        Assert.True(result);
+    }
 }
