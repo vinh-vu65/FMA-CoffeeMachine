@@ -19,15 +19,15 @@ public class DrinkMachineControllerTests
     }
     
     [Fact]
-    public void MatchDrinkInfo_ShouldUseDrinkCatalogToMatchDrinkCode()
+    public void MatchDrinkInfo_ShouldReturnCatalogRecord_WhenDrinkOrderMatchesCatalogRecord()
     {
         var sampleRecord = new CatalogRecord(Products.Coffee, "A", 0);
         _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
-        var moneyInserted = 1;
         
-        _sut.SendDrinkMakerProtocol(_drink, moneyInserted);
+        _sut.MatchDrinkInfo(_drink);
 
         _catalog.Received(1).QueryCatalog(_drink);
+        Assert.Equal(sampleRecord, _sut.DrinkInfo);
     }
 
     [Theory]
@@ -38,6 +38,7 @@ public class DrinkMachineControllerTests
     {
         var sampleRecord = new CatalogRecord(Products.Coffee, "A", 0);
         _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
+        _sut.MatchDrinkInfo(_drink);
 
         _sut.SendDrinkMakerProtocol(_drink, moneyInserted);
         
@@ -54,6 +55,7 @@ public class DrinkMachineControllerTests
     {
         var sampleRecord = new CatalogRecord(Products.Coffee, "A", 10);
         _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
+        _sut.MatchDrinkInfo(_drink);
 
         _sut.SendDrinkMakerProtocol(_drink, moneyInserted);
         
@@ -71,6 +73,7 @@ public class DrinkMachineControllerTests
         _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
         var expectedMessage = $"M:Please insert another {10 - moneyInserted} to receive your drink";
         _protocolBuilder.BuildMessage(Arg.Any<string>()).Returns(expectedMessage);
+        _sut.MatchDrinkInfo(_drink);
 
         var result = _sut.SendDrinkMakerProtocol(_drink, moneyInserted);
         
