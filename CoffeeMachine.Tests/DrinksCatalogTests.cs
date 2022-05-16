@@ -1,5 +1,6 @@
 using CoffeeMachine.Code;
 using CoffeeMachine.Code.Interfaces;
+using CoffeeMachine.Code.Models;
 using NSubstitute;
 using Xunit;
 

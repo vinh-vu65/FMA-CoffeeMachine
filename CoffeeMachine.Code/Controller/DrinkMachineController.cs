@@ -1,6 +1,6 @@
 using CoffeeMachine.Code.Interfaces;
 
-namespace CoffeeMachine.Code;
+namespace CoffeeMachine.Code.Controller;
 
 public class DrinkMachineController
 {
