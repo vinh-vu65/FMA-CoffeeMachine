@@ -26,7 +26,7 @@ public class DrinkMachineController
         return _protocolBuilder.BuildDrink(_drinkInfo.DrinkCode, drinkRequested.Sugars);
     }
 
-    public void MatchDrinkInfo(IDrink drinkRequested)
+    private void MatchDrinkInfo(IDrink drinkRequested)
     {
         _drinkInfo = _catalog.QueryCatalog(drinkRequested);
     }

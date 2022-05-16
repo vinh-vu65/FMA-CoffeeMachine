@@ -4,7 +4,7 @@ using CoffeeMachine.Code.Models;
 using NSubstitute;
 using Xunit;
 
-namespace CoffeeMachine.Tests;
+namespace CoffeeMachine.Tests.Models;
 
 public class DrinksCatalogTests
 {

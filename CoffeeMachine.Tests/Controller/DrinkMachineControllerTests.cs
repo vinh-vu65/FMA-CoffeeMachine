@@ -4,7 +4,7 @@ using CoffeeMachine.Code.Interfaces;
 using NSubstitute;
 using Xunit;
 
-namespace CoffeeMachine.Tests;
+namespace CoffeeMachine.Tests.Controller;
 
 public class DrinkMachineControllerTests
 {
@@ -23,8 +23,9 @@ public class DrinkMachineControllerTests
     {
         var sampleRecord = new CatalogRecord(Products.Coffee, "A", 0);
         _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
+        var moneyInserted = 1;
         
-        _sut.MatchDrinkInfo(_drink);
+        _sut.SendDrinkMakerProtocol(_drink, moneyInserted);
 
         _catalog.Received(1).QueryCatalog(_drink);
     }
