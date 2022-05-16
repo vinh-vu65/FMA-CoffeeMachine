@@ -8,7 +8,7 @@ namespace CoffeeMachine.Tests.Models;
 
 public class DrinksCatalogTests
 {
-    private readonly IDrink _drink = Substitute.For<IDrink>();
+    private readonly IDrinkOrder _drinkOrder = Substitute.For<IDrinkOrder>();
     private readonly DrinksCatalog _sut;
 
     public DrinksCatalogTests()
@@ -23,9 +23,9 @@ public class DrinksCatalogTests
 
     public void QueryCatalog_ShouldReturnCatalogRecordWithMatchingDrinkCode_WhenDrinkTypesMatchInOrderAndCatalog(Products drinkType, string expectedCode)
     {
-        _drink.DrinkType = drinkType;
+        _drinkOrder.DrinkType = drinkType;
         
-        var result = _sut.QueryCatalog(_drink);
+        var result = _sut.QueryCatalog(_drinkOrder);
         
         Assert.Equal(expectedCode, result.DrinkCode);
     }
@@ -37,9 +37,9 @@ public class DrinksCatalogTests
 
     public void QueryCatalog_ShouldReturnCatalogRecordWithMatchingPrice_WhenDrinkTypesMatchInOrderAndCatalog(Products drinkType, double expectedPrice)
     {
-        _drink.DrinkType = drinkType;
+        _drinkOrder.DrinkType = drinkType;
         
-        var result = _sut.QueryCatalog(_drink);
+        var result = _sut.QueryCatalog(_drinkOrder);
         
         Assert.Equal(expectedPrice, result.Price);
     }

@@ -14,12 +14,12 @@ public class DrinkMachineController
         _protocolBuilder = protocolBuilder;
     }
     
-    public void MatchDrinkInfo(IDrink drinkRequested)
+    public void MatchDrinkInfo(IDrinkOrder drinkRequested)
     {
         DrinkInfo = _catalog.QueryCatalog(drinkRequested);
     }
     
-    public string SendDrinkMakerProtocol(IDrink drinkRequested, double moneyInserted)
+    public string SendDrinkMakerProtocol(IDrinkOrder drinkRequested, double moneyInserted)
     {
         if (!IsSufficient(moneyInserted))
         {

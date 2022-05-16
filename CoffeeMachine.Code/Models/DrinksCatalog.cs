@@ -16,7 +16,7 @@ public class DrinksCatalog : IDrinksCatalog
         };
     }
 
-    public CatalogRecord QueryCatalog(IDrink drinkRequested)
+    public CatalogRecord QueryCatalog(IDrinkOrder drinkRequested)
     {
         return Catalog
             .First(d => d.DrinkType == drinkRequested.DrinkType);

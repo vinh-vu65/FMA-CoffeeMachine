@@ -2,7 +2,7 @@ using CoffeeMachine.Code.Interfaces;
 
 namespace CoffeeMachine.Code;
 
-public class DrinkOrder : IDrink
+public class DrinkOrder : IDrinkOrder
 {
     public Products DrinkType { get; set; }
     public int Sugars { get; set; }
