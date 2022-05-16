@@ -16,7 +16,7 @@ public class ProtocolBuilderTests
     [InlineData("A")]
     [InlineData(" ")]
     [InlineData("")]
-    public void BuildDrink_ShouldReturnStringStartingWithDrinkCode_WhenDrinkCodeIsSet(string drinkCode)
+    public void BuildDrink_ShouldReturnStringStartingWithDrinkCode_WhenDrinkCodeIsGiven(string drinkCode)
     {
         var result = _sut.BuildDrink(drinkCode, 1);
         

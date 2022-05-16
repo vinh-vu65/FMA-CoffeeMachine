@@ -59,5 +59,19 @@ public class DrinkMachineControllerTests
         _protocolBuilder.Received(0).BuildDrink("A", Arg.Any<int>());
     }
     
-    
+    [Theory]
+    [InlineData(1.0)]
+    [InlineData(9.99)]
+    [InlineData(0.1)]
+    public void SendDrinkProtocol_ShouldIncludeRemainingMoneyRequired_WhenInsufficientMoneyIsInserted(double moneyInserted)
+    {
+        var sampleRecord = new CatalogRecord(Products.Coffee, "A", 10);
+        _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
+        var expectedMessage = $"M:Please insert another {10 - moneyInserted} to receive your drink";
+        _protocolBuilder.BuildMessage(Arg.Any<string>()).Returns(expectedMessage);
+
+        var result = _sut.SendDrinkMakerProtocol(_drink, moneyInserted);
+        
+        Assert.Equal(expectedMessage, result);
+    }
 }
