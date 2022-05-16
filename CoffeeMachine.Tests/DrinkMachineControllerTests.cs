@@ -10,89 +10,20 @@ public class DrinkMachineControllerTests
     private readonly DrinkMachineController _sut;
     private readonly IDrink _drink = Substitute.For<IDrink>();
     private readonly IDrinksCatalog _catalog = Substitute.For<IDrinksCatalog>();
+    private readonly IProtocolBuilder _protocolBuilder = Substitute.For<IProtocolBuilder>();
 
     public DrinkMachineControllerTests()
     {
-        _sut = new DrinkMachineController(_catalog);
-    }
-    
-    [Theory]
-    [InlineData("C")]
-    [InlineData("test")]
-    public void CreateDrinkMakerProtocol_ShouldUpdateDrinkMakerProtocolWithDrinkCode_WhenDrinkOrderIsGiven(string drinkCode)
-    {
-        var sampleRecord = new CatalogRecord(Products.Coffee, drinkCode, 0);
-        _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
-        _sut.GetCatalogRecord(_drink);
-
-        _sut.CreateDrinkMakerProtocol(_drink);
-        
-        Assert.StartsWith(_sut.DrinkInfo.DrinkCode, _sut.DrinkMakerProtocol);
-    }
-
-    [Theory]
-    [InlineData(0)]
-    [InlineData(99)]
-    [InlineData(1)]
-    public void CreateDrinkMakerProtocol_ShouldUpdateDrinkMakerProtocolWithSugarAmount_WhenDrinkOrderIsGiven(int sugarQuantity)
-    {
-        var sampleRecord = new CatalogRecord(Products.Coffee, "A", 0);
-        _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
-        _drink.Sugars = sugarQuantity;
-        _sut.GetCatalogRecord(_drink);
-        
-        _sut.CreateDrinkMakerProtocol(_drink);
-        
-        Assert.StartsWith($"{_sut.DrinkInfo.DrinkCode}:{_drink.Sugars}", _sut.DrinkMakerProtocol);
-    }
-    
-    [Theory]
-    [InlineData(99)]
-    [InlineData(1)]
-    public void CreateDrinkMakerProtocol_ShouldUpdateDrinkMakerProtocolWithOneAtTheEnd_WhenDrinkOrderContainsSugar(int sugarQuantity)
-    {
-        var sampleRecord = new CatalogRecord(Products.Coffee, "A", 0);
-        _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
-        _drink.Sugars = sugarQuantity;
-        _sut.GetCatalogRecord(_drink);
-
-        _sut.CreateDrinkMakerProtocol(_drink);
-        
-        Assert.Equal($"{_sut.DrinkInfo.DrinkCode}:{_drink.Sugars}:1", _sut.DrinkMakerProtocol);
+        _sut = new DrinkMachineController(_catalog, _protocolBuilder);
     }
     
     [Fact]
-    public void CreateDrinkMakerProtocol_ShouldUpdateDrinkMakerProtocolWithZeroAtTheEnd_WhenDrinkOrderContainsNoSugar()
-    {
-        var sampleRecord = new CatalogRecord(Products.Coffee, "A", 0);
-        _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
-        _drink.Sugars = 0;
-        _sut.GetCatalogRecord(_drink);
-
-        _sut.CreateDrinkMakerProtocol(_drink);
-        
-        Assert.Equal($"{_sut.DrinkInfo.DrinkCode}:{_drink.Sugars}:0", _sut.DrinkMakerProtocol);
-    }
-
-    [Theory]
-    [InlineData("This is a message")]
-    [InlineData("This should display on drink maker")]
-    public void CreateDrinkMakerProtocol_ShouldUpdateDrinkMakerProtocolWithAMessage_WhenMessageIsGiven(string message)
-    {
-        var messageToDisplay = message;
-        
-        _sut.CreateDrinkMakerProtocol(messageToDisplay);
-        
-        Assert.Equal($"M:{message}", _sut.DrinkMakerProtocol);
-    }
-
-    [Fact]
-    public void SetDrinkCode_ShouldUseDrinkCatalogToMatchDrinkCode()
+    public void MatchDrinkInfo_ShouldUseDrinkCatalogToMatchDrinkCode()
     {
         var sampleRecord = new CatalogRecord(Products.Coffee, "A", 0);
         _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
         
-        _sut.GetCatalogRecord(_drink);
+        _sut.MatchDrinkInfo(_drink);
 
         _catalog.Received(1).QueryCatalog(_drink);
     }
@@ -101,29 +32,61 @@ public class DrinkMachineControllerTests
     [InlineData(1.0)]
     [InlineData(10)]
     [InlineData(0.1)]
-    public void HasSufficientMoney_ShouldReturnTrue_WhenInsertedMoneyIsGreaterThanDrinkPrice(double moneyInserted)
+    public void SendDrinkProtocol_ShouldCallProtocolBuildDrink_WhenSufficientMoneyIsInserted(double moneyInserted)
     {
         var sampleRecord = new CatalogRecord(Products.Coffee, "A", 0);
         _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
-        _sut.GetCatalogRecord(_drink);
+        _sut.MatchDrinkInfo(_drink);
 
-        var result = _sut.HasSufficientMoney(moneyInserted);
+        _sut.SendDrinkMakerProtocol(_drink, moneyInserted);
         
-        Assert.True(result);
+        _protocolBuilder.Received(1).BuildDrink();
     }
     
     [Theory]
     [InlineData(1.0)]
     [InlineData(9.99)]
     [InlineData(0.1)]
-    public void HasSufficientMoney_ShouldReturnFalse_WhenInsertedMoneyIsLessThanDrinkPrice(double moneyInserted)
+    public void SendDrinkProtocol_ShouldCallProtocolBuildMessage_WhenInsufficientMoneyIsInserted(double moneyInserted)
     {
         var sampleRecord = new CatalogRecord(Products.Coffee, "A", 10);
         _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
-        _sut.GetCatalogRecord(_drink);
+        _sut.MatchDrinkInfo(_drink);
 
-        var result = _sut.HasSufficientMoney(moneyInserted);
+        _sut.SendDrinkMakerProtocol(_drink, moneyInserted);
         
-        Assert.False(result);
+        _protocolBuilder.Received(1).BuildMessage(Arg.Any<string>());
+    }
+    
+    [Theory]
+    [InlineData(1.0)]
+    [InlineData(10)]
+    [InlineData(0.1)]
+    public void SendDrinkProtocol_ShouldCreateDrinkProtocolWithSugarAndStick_WhenSufficientMoneyIsInsertedAndOrderContainsSugar(double moneyInserted)
+    {
+        var sampleRecord = new CatalogRecord(Products.Coffee, "A", 0);
+        _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
+        _drink.Sugars = 2;
+        _sut.MatchDrinkInfo(_drink);
+
+        _sut.SendDrinkMakerProtocol(_drink, moneyInserted);
+        
+        Assert.Equal("A:2:1", _sut.DrinkMakerProtocol);
+    }
+    
+    [Theory]
+    [InlineData(1.0)]
+    [InlineData(10)]
+    [InlineData(0.1)]
+    public void SendDrinkProtocol_ShouldCreateDrinkProtocolWithNoSugarAndStick_WhenSufficientMoneyIsInsertedAndOrderContainsNoSugar(double moneyInserted)
+    {
+        var sampleRecord = new CatalogRecord(Products.Coffee, "A", 0);
+        _catalog.QueryCatalog(Arg.Any<IDrink>()).Returns(sampleRecord);
+        _drink.Sugars = 0;
+        _sut.MatchDrinkInfo(_drink);
+
+        _sut.SendDrinkMakerProtocol(_drink, moneyInserted);
+        
+        Assert.Equal("A:0:0", _sut.DrinkMakerProtocol);
     }
 }

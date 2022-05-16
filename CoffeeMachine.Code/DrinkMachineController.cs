@@ -7,30 +7,34 @@ public class DrinkMachineController
     public string DrinkMakerProtocol { get; private set; }
     public CatalogRecord DrinkInfo { get; private set; }
     private readonly IDrinksCatalog _catalog;
+    private readonly IProtocolBuilder _protocolBuilder;
 
-    public DrinkMachineController(IDrinksCatalog catalog)
+    public DrinkMachineController(IDrinksCatalog catalog, IProtocolBuilder protocolBuilder)
     {
         _catalog = catalog;
+        _protocolBuilder = protocolBuilder;
     }
     
-    public void GetCatalogRecord(IDrink drinkRequested)
+    public void SendDrinkMakerProtocol(IDrink drinkRequested, double moneyInserted)
+    {
+        MatchDrinkInfo(drinkRequested);
+        if (!IsSufficient(moneyInserted))
+        {
+            var message = $"Please insert another ${DrinkInfo.Price - moneyInserted} to receive your drink";
+            DrinkMakerProtocol = _protocolBuilder.BuildMessage(message);
+            return;
+        }
+        
+        DrinkMakerProtocol = _protocolBuilder.BuildDrink();
+    }
+
+    public void MatchDrinkInfo(IDrink drinkRequested)
     {
         DrinkInfo = _catalog.QueryCatalog(drinkRequested);
     }
-
-    public bool HasSufficientMoney(double moneyInserted)
+    
+    private bool IsSufficient(double moneyInserted)
     {
         return moneyInserted > DrinkInfo.Price;
-    }
-    
-    public void CreateDrinkMakerProtocol(IDrink drinkRequested)
-    {
-        var stirStick = drinkRequested.Sugars > 0 ? "1" : "0";
-        DrinkMakerProtocol = $"{DrinkInfo.DrinkCode}:{drinkRequested.Sugars}:{stirStick}";
-    }
-
-    public void CreateDrinkMakerProtocol(string message)
-    {
-        DrinkMakerProtocol = $"M:{message}";
     }
 }
