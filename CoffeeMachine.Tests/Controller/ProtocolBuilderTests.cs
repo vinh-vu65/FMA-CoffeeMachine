@@ -25,7 +25,7 @@ public class ProtocolBuilderTests
     
     [Theory]
     [InlineData(0)]
-    [InlineData(99)]
+    [InlineData(2)]
     [InlineData(1)]
     public void BuildDrink_ShouldReturnStringWithSugarQuantityAfterDrinkCode(int sugarQuantity)
     {
@@ -35,9 +35,22 @@ public class ProtocolBuilderTests
         
         Assert.StartsWith($"{drinkCode}:{sugarQuantity}", result);
     }
+    
+    [Theory]
+    [InlineData(3)]
+    [InlineData(2)]
+    [InlineData(99)]
+    public void BuildDrink_ShouldAllowMaximumOfTwoSugars(int sugarQuantity)
+    {
+        var drinkCode = "A";
+        
+        var result = _sut.BuildDrink(drinkCode, sugarQuantity);
+        
+        Assert.StartsWith($"{drinkCode}:2", result);
+    }
 
     [Theory]
-    [InlineData(99)]
+    [InlineData(2)]
     [InlineData(1)]
     public void BuildDrink_ShouldReturnStringEndingWithOne_WhenDrinkContainsSugar(int sugarQuantity)
     {

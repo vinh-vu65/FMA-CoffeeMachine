@@ -7,6 +7,10 @@ public class ProtocolBuilder : IProtocolBuilder
     public string BuildDrink(string drinkCode, int sugars)
     {
         var stirStick = sugars > 0 ? "1" : "0";
+        if (sugars > Constants.MaximumSugarOutput)
+        {
+            sugars = Constants.MaximumSugarOutput;
+        }
         return $"{drinkCode}:{sugars}:{stirStick}";
     }
 
