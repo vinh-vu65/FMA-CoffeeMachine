@@ -18,9 +18,7 @@ public class ProtocolBuilderTests
     [InlineData("")]
     public void BuildDrink_ShouldReturnStringStartingWithDrinkCode_WhenDrinkCodeIsSet(string drinkCode)
     {
-        _sut.DrinkCode = drinkCode;
-
-        var result = _sut.BuildDrink();
+        var result = _sut.BuildDrink(drinkCode, 1);
         
         Assert.StartsWith(drinkCode, result);
     }
@@ -31,12 +29,11 @@ public class ProtocolBuilderTests
     [InlineData(1)]
     public void BuildDrink_ShouldReturnStringWithSugarQuantityAfterDrinkCode(int sugarQuantity)
     {
-        _sut.DrinkCode = "A";
-        _sut.Sugars = sugarQuantity;
+        var drinkCode = "A";
         
-        var result = _sut.BuildDrink();
+        var result = _sut.BuildDrink(drinkCode, sugarQuantity);
         
-        Assert.StartsWith($"{_sut.DrinkCode}:{sugarQuantity}", result);
+        Assert.StartsWith($"{drinkCode}:{sugarQuantity}", result);
     }
 
     [Theory]
@@ -44,23 +41,22 @@ public class ProtocolBuilderTests
     [InlineData(1)]
     public void BuildDrink_ShouldReturnStringEndingWithOne_WhenDrinkContainsSugar(int sugarQuantity)
     {
-        _sut.DrinkCode = "A";
-        _sut.Sugars = sugarQuantity;
+        var drinkCode = "A";
         
-        var result = _sut.BuildDrink();
+        var result = _sut.BuildDrink(drinkCode, sugarQuantity);
         
-        Assert.Equal($"{_sut.DrinkCode}:{_sut.Sugars}:1", result);
+        Assert.Equal($"{drinkCode}:{sugarQuantity}:1", result);
     }
     
     [Fact]
     public void BuildDrink_ShouldReturnStringEndingWithOne_WhenDrinkContainsNoSugar()
     {
-        _sut.DrinkCode = "A";
-        _sut.Sugars = 0;
+        var drinkCode = "A";
+        var sugars = 0;
         
-        var result = _sut.BuildDrink();
+        var result = _sut.BuildDrink(drinkCode, sugars);
         
-        Assert.Equal($"{_sut.DrinkCode}:{_sut.Sugars}:0", result);
+        Assert.Equal($"{drinkCode}:{sugars}:0", result);
     }
     
     [Theory]

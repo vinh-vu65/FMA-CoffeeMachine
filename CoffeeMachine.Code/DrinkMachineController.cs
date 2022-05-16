@@ -4,8 +4,7 @@ namespace CoffeeMachine.Code;
 
 public class DrinkMachineController
 {
-    public string DrinkMakerProtocol { get; private set; }
-    public CatalogRecord DrinkInfo { get; private set; }
+    private CatalogRecord _drinkInfo;
     private readonly IDrinksCatalog _catalog;
     private readonly IProtocolBuilder _protocolBuilder;
 
@@ -15,26 +14,25 @@ public class DrinkMachineController
         _protocolBuilder = protocolBuilder;
     }
     
-    public void SendDrinkMakerProtocol(IDrink drinkRequested, double moneyInserted)
+    public string SendDrinkMakerProtocol(IDrink drinkRequested, double moneyInserted)
     {
         MatchDrinkInfo(drinkRequested);
         if (!IsSufficient(moneyInserted))
         {
-            var message = $"Please insert another ${DrinkInfo.Price - moneyInserted} to receive your drink";
-            DrinkMakerProtocol = _protocolBuilder.BuildMessage(message);
-            return;
+            var message = $"Please insert another ${_drinkInfo.Price - moneyInserted} to receive your drink";
+            return _protocolBuilder.BuildMessage(message);
         }
         
-        DrinkMakerProtocol = _protocolBuilder.BuildDrink();
+        return _protocolBuilder.BuildDrink(_drinkInfo.DrinkCode, drinkRequested.Sugars);
     }
 
     public void MatchDrinkInfo(IDrink drinkRequested)
     {
-        DrinkInfo = _catalog.QueryCatalog(drinkRequested);
+        _drinkInfo = _catalog.QueryCatalog(drinkRequested);
     }
     
     private bool IsSufficient(double moneyInserted)
     {
-        return moneyInserted > DrinkInfo.Price;
+        return moneyInserted > _drinkInfo.Price;
     }
 }

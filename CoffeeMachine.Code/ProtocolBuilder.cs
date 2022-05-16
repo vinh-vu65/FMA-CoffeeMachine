@@ -3,14 +3,11 @@ using CoffeeMachine.Code.Interfaces;
 namespace CoffeeMachine.Code;
 
 public class ProtocolBuilder : IProtocolBuilder
-{
-    public string DrinkCode { get; set; } = null!;
-    public int Sugars { get; set; }
-
-    public string BuildDrink()
+{ 
+    public string BuildDrink(string drinkCode, int sugars)
     {
-        var stirStick = Sugars > 0 ? "1" : "0";
-        return $"{DrinkCode}:{Sugars}:{stirStick}";
+        var stirStick = sugars > 0 ? "1" : "0";
+        return $"{drinkCode}:{sugars}:{stirStick}";
     }
 
     public string BuildMessage(string message)

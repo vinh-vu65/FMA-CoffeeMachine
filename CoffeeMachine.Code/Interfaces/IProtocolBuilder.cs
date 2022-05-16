@@ -2,9 +2,6 @@ namespace CoffeeMachine.Code.Interfaces;
 
 public interface IProtocolBuilder
 {
-    string DrinkCode { get; set; }
-    int Sugars { get; set; }
-    
-    string BuildDrink();
+    string BuildDrink(string drinkCode, int sugars);
     string BuildMessage(string message);
 }
