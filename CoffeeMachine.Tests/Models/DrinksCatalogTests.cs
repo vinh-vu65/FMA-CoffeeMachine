@@ -1,14 +1,11 @@
 using CoffeeMachine.Code;
-using CoffeeMachine.Code.Interfaces;
 using CoffeeMachine.Code.Models;
-using NSubstitute;
 using Xunit;
 
 namespace CoffeeMachine.Tests.Models;
 
 public class DrinksCatalogTests
 {
-    private readonly IDrinkOrder _drinkOrder = Substitute.For<IDrinkOrder>();
     private readonly DrinksCatalog _sut;
 
     public DrinksCatalogTests()

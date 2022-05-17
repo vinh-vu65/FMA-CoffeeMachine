@@ -1,8 +1,6 @@
-using CoffeeMachine.Code.Interfaces;
+namespace CoffeeMachine.Code.Models;
 
-namespace CoffeeMachine.Code;
-
-public class DrinkOrder : IDrinkOrder
+public class DrinkOrder
 {
     public DrinkType DrinkType { get; }
     public int Sugars { get; }
