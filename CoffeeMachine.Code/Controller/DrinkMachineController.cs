@@ -16,7 +16,7 @@ public class DrinkMachineController
     
     public void MatchDrinkInfo(IDrinkOrder drinkRequested)
     {
-        DrinkInfo = _catalog.QueryCatalog(drinkRequested);
+        DrinkInfo = _catalog.QueryCatalog(drinkRequested.DrinkType);
     }
     
     public string SendDrinkMakerProtocol(IDrinkOrder drinkRequested, double moneyInserted)
