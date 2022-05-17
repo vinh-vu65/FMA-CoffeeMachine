@@ -23,23 +23,19 @@ public class DrinksCatalogTests
 
     public void QueryCatalog_ShouldReturnCatalogRecordWithMatchingDrinkCode_WhenDrinkTypesMatchInOrderAndCatalog(DrinkType drinkType, string expectedCode)
     {
-        _drinkOrder.DrinkType = drinkType;
-        
-        var result = _sut.QueryCatalog(_drinkOrder);
+        var result = _sut.QueryCatalog(drinkType);
         
         Assert.Equal(expectedCode, result.DrinkCode);
     }
     
     [Theory]
-    [InlineData(DrinkType.Coffee, DrinksCatalog.CoffeePrice)]
-    [InlineData(DrinkType.HotChocolate, DrinksCatalog.HotChocPrice)]
-    [InlineData(DrinkType.Tea, DrinksCatalog.TeaPrice)]
+    [InlineData(DrinkType.Coffee, 5.5)]
+    [InlineData(DrinkType.HotChocolate, 6)]
+    [InlineData(DrinkType.Tea, 4)]
 
     public void QueryCatalog_ShouldReturnCatalogRecordWithMatchingPrice_WhenDrinkTypesMatchInOrderAndCatalog(DrinkType drinkType, double expectedPrice)
     {
-        _drinkOrder.DrinkType = drinkType;
-        
-        var result = _sut.QueryCatalog(_drinkOrder);
+        var result = _sut.QueryCatalog(drinkType);
         
         Assert.Equal(expectedPrice, result.Price);
     }
