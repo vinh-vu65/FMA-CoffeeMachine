@@ -1,6 +1,6 @@
-using CoffeeMachine.Code.Interfaces;
+using CoffeeMachine.Code.Controller;
 
-namespace CoffeeMachine.Code.Controller;
+namespace CoffeeMachine.Code.Services;
 
 public class ProtocolBuilder : IProtocolBuilder
 { 

@@ -1,7 +1,6 @@
-using CoffeeMachine.Code;
 using CoffeeMachine.Code.Controller;
-using CoffeeMachine.Code.Interfaces;
 using CoffeeMachine.Code.Models;
+using CoffeeMachine.Code.Services;
 using NSubstitute;
 using Xunit;
 

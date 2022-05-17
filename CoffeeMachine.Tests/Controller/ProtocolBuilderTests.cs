@@ -1,4 +1,4 @@
-using CoffeeMachine.Code.Controller;
+using CoffeeMachine.Code.Services;
 using Xunit;
 
 namespace CoffeeMachine.Tests.Controller;

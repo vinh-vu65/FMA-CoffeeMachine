@@ -1,6 +1,6 @@
 using CoffeeMachine.Code.Models;
 
-namespace CoffeeMachine.Code.Interfaces;
+namespace CoffeeMachine.Code.Services;
 
 public interface IDrinksCatalog
 { 

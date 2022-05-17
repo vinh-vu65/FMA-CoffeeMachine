@@ -1,6 +1,6 @@
-using CoffeeMachine.Code.Interfaces;
+using CoffeeMachine.Code.Models;
 
-namespace CoffeeMachine.Code.Models;
+namespace CoffeeMachine.Code.Services;
 
 public class DrinksCatalog : IDrinksCatalog
 {

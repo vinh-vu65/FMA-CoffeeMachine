@@ -1,8 +1,8 @@
-using CoffeeMachine.Code;
 using CoffeeMachine.Code.Models;
+using CoffeeMachine.Code.Services;
 using Xunit;
 
-namespace CoffeeMachine.Tests.Models;
+namespace CoffeeMachine.Tests.Services;
 
 public class DrinksCatalogTests
 {

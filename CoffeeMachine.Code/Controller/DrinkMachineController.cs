@@ -1,5 +1,5 @@
-using CoffeeMachine.Code.Interfaces;
 using CoffeeMachine.Code.Models;
+using CoffeeMachine.Code.Services;
 
 namespace CoffeeMachine.Code.Controller;
 
