@@ -2,6 +2,6 @@ namespace CoffeeMachine.Code.Interfaces;
 
 public interface IDrinkOrder
 {
-    public Products DrinkType { get; set; }
-    public int Sugars { get; set; }
+    public DrinkType DrinkType { get; }
+    public int Sugars { get; }
 }

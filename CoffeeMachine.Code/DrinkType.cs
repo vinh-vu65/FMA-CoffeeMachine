@@ -1,6 +1,6 @@
 namespace CoffeeMachine.Code;
 
-public enum Products
+public enum DrinkType
 {
     Coffee,
     HotChocolate,

@@ -21,7 +21,7 @@ public class DrinkMachineControllerTests
     [Fact]
     public void MatchDrinkInfo_ShouldReturnCatalogRecord_WhenDrinkOrderMatchesCatalogRecord()
     {
-        var sampleRecord = new CatalogRecord(Products.Coffee, "A", 0);
+        var sampleRecord = new CatalogRecord(DrinkType.Coffee, "A", 0);
         _catalog.QueryCatalog(Arg.Any<IDrinkOrder>()).Returns(sampleRecord);
         
         _sut.MatchDrinkInfo(_drinkOrder);
@@ -36,7 +36,7 @@ public class DrinkMachineControllerTests
     [InlineData(0.1)]
     public void SendDrinkProtocol_ShouldCallProtocolBuildDrink_WhenSufficientMoneyIsInserted(double moneyInserted)
     {
-        var sampleRecord = new CatalogRecord(Products.Coffee, "A", 0);
+        var sampleRecord = new CatalogRecord(DrinkType.Coffee, "A", 0);
         _catalog.QueryCatalog(Arg.Any<IDrinkOrder>()).Returns(sampleRecord);
         _sut.MatchDrinkInfo(_drinkOrder);
 
@@ -53,7 +53,7 @@ public class DrinkMachineControllerTests
     [InlineData(0.1)]
     public void SendDrinkProtocol_ShouldCallProtocolBuildMessage_WhenInsufficientMoneyIsInserted(double moneyInserted)
     {
-        var sampleRecord = new CatalogRecord(Products.Coffee, "A", 10);
+        var sampleRecord = new CatalogRecord(DrinkType.Coffee, "A", 10);
         _catalog.QueryCatalog(Arg.Any<IDrinkOrder>()).Returns(sampleRecord);
         _sut.MatchDrinkInfo(_drinkOrder);
 
@@ -69,7 +69,7 @@ public class DrinkMachineControllerTests
     [InlineData(0.1)]
     public void SendDrinkProtocol_ShouldIncludeRemainingMoneyRequired_WhenInsufficientMoneyIsInserted(double moneyInserted)
     {
-        var sampleRecord = new CatalogRecord(Products.Coffee, "A", 10);
+        var sampleRecord = new CatalogRecord(DrinkType.Coffee, "A", 10);
         _catalog.QueryCatalog(Arg.Any<IDrinkOrder>()).Returns(sampleRecord);
         var expectedMessage = $"M:Please insert another {10 - moneyInserted} to receive your drink";
         _protocolBuilder.BuildMessage(Arg.Any<string>()).Returns(expectedMessage);
