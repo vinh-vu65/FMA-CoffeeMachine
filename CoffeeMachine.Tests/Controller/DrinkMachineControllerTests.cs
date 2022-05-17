@@ -92,5 +92,21 @@ public class DrinkMachineControllerTests
         Assert.Contains(expectedMessage, result);
     }
     
-    
+    // Integration tests:
+    [Theory]
+    [InlineData(DrinkType.Coffee, 2, "C:2:1")]
+    [InlineData(DrinkType.HotChocolate, 0, "H:0:0")]
+    [InlineData(DrinkType.Tea, 3, "T:2:1")]
+    [InlineData(DrinkType.Coffee, 1, "C:1:1")]
+    public void SendDrinkProtocol_ShouldReturnDrinkProtocol_WhenDrinkOrderIsGivenAndEnoughMoneyIsInserted(DrinkType drinkType, int sugar, string expected)
+    {
+        var drink = new DrinkOrder(drinkType, sugar);
+        var catalog = new DrinksCatalog();
+        var builder = new ProtocolBuilder();
+        var sut = new DrinkMachineController(catalog, builder);
+
+        var result = sut.SendDrinkMakerProtocol(drink, 10);
+        
+        Assert.Equal(expected, result);
+    }
 }
