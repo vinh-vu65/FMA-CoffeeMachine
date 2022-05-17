@@ -4,18 +4,17 @@ namespace CoffeeMachine.Code.Models;
 
 public class DrinksCatalog : IDrinksCatalog
 {
-    public const double CoffeePrice = 5.5;
-    public const double HotChocPrice = 6;
-    public const double TeaPrice = 4;
-    public const string CoffeeDrinkCode = "C";
-    public const string HotChocDrinkCode = "H";
-    public const string TeaDrinkCode = "T";
-    
-    public CatalogRecord[] Catalog { get; }
+    private const double CoffeePrice = 5.5;
+    private const double HotChocPrice = 6;
+    private const double TeaPrice = 4;
+    private const string CoffeeDrinkCode = "C";
+    private const string HotChocDrinkCode = "H";
+    private const string TeaDrinkCode = "T";
+    private readonly CatalogRecord[] _catalog;
 
     public DrinksCatalog()
     {
-        Catalog = new CatalogRecord[]
+        _catalog = new CatalogRecord[]
         {
             new(DrinkType.Coffee, CoffeeDrinkCode, CoffeePrice),
             new(DrinkType.HotChocolate, HotChocDrinkCode, HotChocPrice),
@@ -25,7 +24,7 @@ public class DrinksCatalog : IDrinksCatalog
 
     public CatalogRecord QueryCatalog(DrinkType drinkType)
     {
-        return Catalog
+        return _catalog
             .First(d => d.DrinkType == drinkType);
     }
 }
