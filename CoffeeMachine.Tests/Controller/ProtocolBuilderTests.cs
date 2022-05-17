@@ -62,7 +62,7 @@ public class ProtocolBuilderTests
     }
     
     [Fact]
-    public void BuildDrink_ShouldReturnStringEndingWithOne_WhenDrinkContainsNoSugar()
+    public void BuildDrink_ShouldReturnStringEndingWithZero_WhenDrinkContainsNoSugar()
     {
         var drinkCode = "A";
         var sugars = 0;
