@@ -22,10 +22,10 @@ public class DrinkMachineController
         if (!IsSufficient(moneyInserted))
         {
             var message = $"Please insert another ${DrinkInfo.Price - moneyInserted} to receive your drink";
-            return _protocolBuilder.BuildMessage(message);
+            return _protocolBuilder.BuildMessageCommand(message);
         }
         
-        return _protocolBuilder.BuildDrink(DrinkInfo.DrinkCode, drinkRequested.Sugars);
+        return _protocolBuilder.BuildDrinkCommand(DrinkInfo.DrinkCode, drinkRequested.Sugars);
     }
     
     private void MatchDrinkInfo(DrinkOrder drinkRequested)

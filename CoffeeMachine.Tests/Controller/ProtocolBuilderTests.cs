@@ -18,7 +18,7 @@ public class ProtocolBuilderTests
     [InlineData("")]
     public void BuildDrink_ShouldReturnStringStartingWithDrinkCode_WhenDrinkCodeIsGiven(string drinkCode)
     {
-        var result = _sut.BuildDrink(drinkCode, 1);
+        var result = _sut.BuildDrinkCommand(drinkCode, 1);
         
         Assert.StartsWith(drinkCode, result);
     }
@@ -31,7 +31,7 @@ public class ProtocolBuilderTests
     {
         var drinkCode = "A";
         
-        var result = _sut.BuildDrink(drinkCode, sugarQuantity);
+        var result = _sut.BuildDrinkCommand(drinkCode, sugarQuantity);
         
         Assert.StartsWith($"{drinkCode}:{sugarQuantity}", result);
     }
@@ -44,7 +44,7 @@ public class ProtocolBuilderTests
     {
         var drinkCode = "A";
         
-        var result = _sut.BuildDrink(drinkCode, sugarQuantity);
+        var result = _sut.BuildDrinkCommand(drinkCode, sugarQuantity);
         
         Assert.StartsWith($"{drinkCode}:2", result);
     }
@@ -56,7 +56,7 @@ public class ProtocolBuilderTests
     {
         var drinkCode = "A";
         
-        var result = _sut.BuildDrink(drinkCode, sugarQuantity);
+        var result = _sut.BuildDrinkCommand(drinkCode, sugarQuantity);
         
         Assert.Equal($"{drinkCode}:{sugarQuantity}:1", result);
     }
@@ -67,7 +67,7 @@ public class ProtocolBuilderTests
         var drinkCode = "A";
         var sugars = 0;
         
-        var result = _sut.BuildDrink(drinkCode, sugars);
+        var result = _sut.BuildDrinkCommand(drinkCode, sugars);
         
         Assert.Equal($"{drinkCode}:{sugars}:0", result);
     }
@@ -79,7 +79,7 @@ public class ProtocolBuilderTests
     {
         var messageToDisplay = message;
         
-        var result = _sut.BuildMessage(messageToDisplay);
+        var result = _sut.BuildMessageCommand(messageToDisplay);
         
         Assert.Equal($"M:{message}", result);
     }

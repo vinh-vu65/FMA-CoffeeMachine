@@ -55,8 +55,8 @@ public class DrinkMachineControllerTests
 
         _sut.SendDrinkMakerProtocol(_drinkOrder, moneyInserted);
         
-        _protocolBuilder.Received(1).BuildDrink("A", Arg.Any<int>());
-        _protocolBuilder.Received(0).BuildMessage(Arg.Any<string>());
+        _protocolBuilder.Received(1).BuildDrinkCommand("A", Arg.Any<int>());
+        _protocolBuilder.Received(0).BuildMessageCommand(Arg.Any<string>());
     }
     
     [Theory]
@@ -71,8 +71,8 @@ public class DrinkMachineControllerTests
 
         _sut.SendDrinkMakerProtocol(_drinkOrder, moneyInserted);
         
-        _protocolBuilder.Received(1).BuildMessage(Arg.Any<string>());
-        _protocolBuilder.Received(0).BuildDrink("A", Arg.Any<int>());
+        _protocolBuilder.Received(1).BuildMessageCommand(Arg.Any<string>());
+        _protocolBuilder.Received(0).BuildDrinkCommand("A", Arg.Any<int>());
     }
     
     [Theory]
@@ -84,7 +84,7 @@ public class DrinkMachineControllerTests
         var sampleRecord = new CatalogRecord(DrinkType.Coffee, "A", 10);
         _catalog.QueryCatalog(Arg.Any<DrinkType>()).Returns(sampleRecord);
         var expectedMessage = $"{moneyDifference}";
-        _protocolBuilder.BuildMessage(Arg.Any<string>()).Returns(expectedMessage);
+        _protocolBuilder.BuildMessageCommand(Arg.Any<string>()).Returns(expectedMessage);
         _drinkOrder = new DrinkOrder(DrinkType.Coffee, 2);
 
         var result = _sut.SendDrinkMakerProtocol(_drinkOrder, moneyInserted);
