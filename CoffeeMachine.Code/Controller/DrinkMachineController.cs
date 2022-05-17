@@ -1,4 +1,5 @@
 using CoffeeMachine.Code.Interfaces;
+using CoffeeMachine.Code.Models;
 
 namespace CoffeeMachine.Code.Controller;
 
@@ -14,13 +15,10 @@ public class DrinkMachineController
         _protocolBuilder = protocolBuilder;
     }
     
-    public void MatchDrinkInfo(IDrinkOrder drinkRequested)
+    public string SendDrinkMakerProtocol(DrinkOrder drinkRequested, double moneyInserted)
     {
-        DrinkInfo = _catalog.QueryCatalog(drinkRequested.DrinkType);
-    }
-    
-    public string SendDrinkMakerProtocol(IDrinkOrder drinkRequested, double moneyInserted)
-    {
+        MatchDrinkInfo(drinkRequested);
+        
         if (!IsSufficient(moneyInserted))
         {
             var message = $"Please insert another ${DrinkInfo.Price - moneyInserted} to receive your drink";
@@ -28,6 +26,11 @@ public class DrinkMachineController
         }
         
         return _protocolBuilder.BuildDrink(DrinkInfo.DrinkCode, drinkRequested.Sugars);
+    }
+    
+    private void MatchDrinkInfo(DrinkOrder drinkRequested)
+    {
+        DrinkInfo = _catalog.QueryCatalog(drinkRequested.DrinkType);
     }
     
     private bool IsSufficient(double moneyInserted)
