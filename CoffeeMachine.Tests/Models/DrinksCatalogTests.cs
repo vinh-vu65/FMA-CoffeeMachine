@@ -17,11 +17,11 @@ public class DrinksCatalogTests
     }
     
     [Theory]
-    [InlineData(Products.Coffee, "C")]
-    [InlineData(Products.HotChocolate, "H")]
-    [InlineData(Products.Tea, "T")]
+    [InlineData(DrinkType.Coffee, "C")]
+    [InlineData(DrinkType.HotChocolate, "H")]
+    [InlineData(DrinkType.Tea, "T")]
 
-    public void QueryCatalog_ShouldReturnCatalogRecordWithMatchingDrinkCode_WhenDrinkTypesMatchInOrderAndCatalog(Products drinkType, string expectedCode)
+    public void QueryCatalog_ShouldReturnCatalogRecordWithMatchingDrinkCode_WhenDrinkTypesMatchInOrderAndCatalog(DrinkType drinkType, string expectedCode)
     {
         _drinkOrder.DrinkType = drinkType;
         
@@ -31,11 +31,11 @@ public class DrinksCatalogTests
     }
     
     [Theory]
-    [InlineData(Products.Coffee, Constants.CoffeePrice)]
-    [InlineData(Products.HotChocolate, Constants.HotChocPrice)]
-    [InlineData(Products.Tea, Constants.TeaPrice)]
+    [InlineData(DrinkType.Coffee, DrinksCatalog.CoffeePrice)]
+    [InlineData(DrinkType.HotChocolate, DrinksCatalog.HotChocPrice)]
+    [InlineData(DrinkType.Tea, DrinksCatalog.TeaPrice)]
 
-    public void QueryCatalog_ShouldReturnCatalogRecordWithMatchingPrice_WhenDrinkTypesMatchInOrderAndCatalog(Products drinkType, double expectedPrice)
+    public void QueryCatalog_ShouldReturnCatalogRecordWithMatchingPrice_WhenDrinkTypesMatchInOrderAndCatalog(DrinkType drinkType, double expectedPrice)
     {
         _drinkOrder.DrinkType = drinkType;
         
