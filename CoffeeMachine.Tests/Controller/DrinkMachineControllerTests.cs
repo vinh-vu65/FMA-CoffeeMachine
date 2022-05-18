@@ -17,19 +17,7 @@ public class DrinkMachineControllerTests
     {
         _sut = new DrinkMachineController(_catalog, _protocolBuilder);
     }
-    
-    [Fact]
-    public void SendDrinkProtocol_ShouldSetDrinkInfo_WhenDrinkTypeMatchesCatalogRecord()
-    {
-        var sampleRecord = new CatalogRecord(DrinkType.Coffee, "A", 0);
-        _catalog.QueryCatalog(Arg.Any<DrinkType>()).Returns(sampleRecord);
-        _drinkOrder = new DrinkOrder(DrinkType.Coffee, 2);
-        
-        _sut.SendDrinkMakerProtocol(_drinkOrder, 10);
 
-        Assert.Equal(sampleRecord, _sut.DrinkInfo);
-    }
-    
     [Fact]
     public void SendDrinkProtocol_ShouldCallQueryCatalogMethod()
     {
@@ -37,7 +25,7 @@ public class DrinkMachineControllerTests
         _catalog.QueryCatalog(Arg.Any<DrinkType>()).Returns(sampleRecord);
         _drinkOrder = new DrinkOrder(DrinkType.Coffee, 2);
         
-        _sut.SendDrinkMakerProtocol(_drinkOrder, 10);
+        _sut.CreateDrinkMakerCommand(_drinkOrder, 10);
 
         _catalog.Received(1).QueryCatalog(_drinkOrder.DrinkType);
     }
@@ -52,7 +40,7 @@ public class DrinkMachineControllerTests
         _catalog.QueryCatalog(Arg.Any<DrinkType>()).Returns(sampleRecord);
         _drinkOrder = new DrinkOrder(DrinkType.Coffee, 2);
 
-        _sut.SendDrinkMakerProtocol(_drinkOrder, moneyInserted);
+        _sut.CreateDrinkMakerCommand(_drinkOrder, moneyInserted);
         
         _protocolBuilder.Received(1).BuildDrinkCommand("A", Arg.Any<int>());
         _protocolBuilder.Received(0).BuildMessageCommand(Arg.Any<string>());
@@ -68,7 +56,7 @@ public class DrinkMachineControllerTests
         _catalog.QueryCatalog(Arg.Any<DrinkType>()).Returns(sampleRecord);
         _drinkOrder = new DrinkOrder(DrinkType.Coffee, 2);
 
-        _sut.SendDrinkMakerProtocol(_drinkOrder, moneyInserted);
+        _sut.CreateDrinkMakerCommand(_drinkOrder, moneyInserted);
         
         _protocolBuilder.Received(1).BuildMessageCommand(Arg.Any<string>());
         _protocolBuilder.Received(0).BuildDrinkCommand("A", Arg.Any<int>());
@@ -86,7 +74,7 @@ public class DrinkMachineControllerTests
         _protocolBuilder.BuildMessageCommand(Arg.Any<string>()).Returns(expectedMessage);
         _drinkOrder = new DrinkOrder(DrinkType.Coffee, 2);
 
-        var result = _sut.SendDrinkMakerProtocol(_drinkOrder, moneyInserted);
+        var result = _sut.CreateDrinkMakerCommand(_drinkOrder, moneyInserted);
         
         Assert.Contains(expectedMessage, result);
     }
@@ -104,7 +92,7 @@ public class DrinkMachineControllerTests
         var builder = new ProtocolBuilder();
         var sut = new DrinkMachineController(catalog, builder);
 
-        var result = sut.SendDrinkMakerProtocol(drink, 10);
+        var result = sut.CreateDrinkMakerCommand(drink, 10);
         
         Assert.Equal(expected, result);
     }
