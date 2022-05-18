@@ -14,7 +14,7 @@ public class DrinkMachineController
         _protocolBuilder = protocolBuilder;
     }
     
-    public string CreateDrinkMakerCommand(DrinkOrder drinkRequested, double moneyInserted)
+    public string CreateDrinkMakerCommand(DrinkOrder drinkRequested, decimal moneyInserted)
     {
         var drinkInfo = GetDrinkInfo(drinkRequested);
         

@@ -10,9 +10,9 @@ public class DrinksCatalog : IDrinksCatalog
     {
         _catalog = new CatalogRecord[]
         {
-            new(DrinkType.Coffee, "C", 5.5),
-            new(DrinkType.HotChocolate, "H", 6),
-            new(DrinkType.Tea, "T", 4)
+            new(DrinkType.Coffee, "C", 5.5m),
+            new(DrinkType.HotChocolate, "H", 6m),
+            new(DrinkType.Tea, "T", 4m)
         };
     }
 

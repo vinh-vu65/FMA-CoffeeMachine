@@ -30,7 +30,7 @@ public class DrinksCatalogTests
     [InlineData(DrinkType.HotChocolate, 6)]
     [InlineData(DrinkType.Tea, 4)]
 
-    public void QueryCatalog_ShouldReturnCatalogRecordWithMatchingPrice_WhenDrinkTypesMatchInOrderAndCatalog(DrinkType drinkType, double expectedPrice)
+    public void QueryCatalog_ShouldReturnCatalogRecordWithMatchingPrice_WhenDrinkTypesMatchInOrderAndCatalog(DrinkType drinkType, decimal expectedPrice)
     {
         var result = _sut.QueryCatalog(drinkType);
         
