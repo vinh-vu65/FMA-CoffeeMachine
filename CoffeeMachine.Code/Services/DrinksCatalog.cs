@@ -12,7 +12,8 @@ public class DrinksCatalog : IDrinksCatalog
         {
             new(DrinkType.Coffee, "C", 5.5m),
             new(DrinkType.HotChocolate, "H", 6m),
-            new(DrinkType.Tea, "T", 4m)
+            new(DrinkType.Tea, "T", 4m),
+            new(DrinkType.OrangeJuice, "O", 4.5m)
         };
     }
 
