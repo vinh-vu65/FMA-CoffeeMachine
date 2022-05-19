@@ -120,7 +120,7 @@ public class DrinkMachineControllerTests
         var sut = new DrinkMachineController(catalog, builder);
 
         var result = sut.CreateDrinkMakerCommand(drink, 10m);
-        
-        Assert.StartsWith("M:", result);
+
+        Assert.StartsWith("M:", result); 
     }
 }
