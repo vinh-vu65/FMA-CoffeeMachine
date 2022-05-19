@@ -23,9 +23,13 @@ public class DrinkMachineController
             var message = $"Please insert another ${drinkInfo.Price - moneyInserted} to receive your drink";
             return _protocolBuilder.BuildMessageCommand(message);
         }
-        
-        
-        return _protocolBuilder.BuildDrinkCommand(drinkInfo.DrinkCode, drinkRequested.Sugars);
+
+        var drinkCode = drinkInfo.DrinkCode;
+        if (drinkRequested.IsExtraHot)
+        {
+            drinkCode += "h";
+        }
+        return _protocolBuilder.BuildDrinkCommand(drinkCode, drinkRequested.Sugars);
     }
     
     private CatalogRecord GetDrinkInfo(DrinkOrder drinkRequested)
