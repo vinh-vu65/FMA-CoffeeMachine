@@ -97,14 +97,16 @@ public class DrinkMachineControllerTests
         Assert.Equal(expected, result);
     }
     
-    [Fact]
-    public void CreateDrinkMakerCommand_ShouldAddhToDrinkCode_WhenDrinkOrderIsExtraHot()
+    [Theory]
+    [InlineData(DrinkType.Coffee, "Ch:2:1")]
+    [InlineData(DrinkType.Tea, "Th:2:1")]
+    [InlineData(DrinkType.HotChocolate, "Hh:2:1")]
+    public void CreateDrinkMakerCommand_ShouldAddhToDrinkCode_WhenDrinkOrderIsExtraHot(DrinkType drinkType, string expected)
     {
-        var drink = new DrinkOrder(DrinkType.Coffee, 2, true);
+        var drink = new DrinkOrder(drinkType, 2, true);
         var catalog = new DrinksCatalog();
         var builder = new ProtocolBuilder();
         var sut = new DrinkMachineController(catalog, builder);
-        var expected = "Ch:2:1";
 
         var result = sut.CreateDrinkMakerCommand(drink, 10m);
         
