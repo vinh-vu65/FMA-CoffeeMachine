@@ -17,6 +17,12 @@ public class DrinkMachineController
     public string CreateDrinkMakerCommand(DrinkOrder drinkRequested, decimal moneyInserted)
     {
         var drinkInfo = GetDrinkInfo(drinkRequested);
+
+        if (drinkRequested.IsExtraHot && drinkInfo.DrinkType == DrinkType.OrangeJuice)
+        {
+            var message = "Selected drink cannot be made extra hot, please enter a new drink order.";
+            return _protocolBuilder.BuildMessageCommand(message);
+        }
         
         if (moneyInserted < drinkInfo.Price)
         {
