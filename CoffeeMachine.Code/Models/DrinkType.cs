@@ -4,5 +4,6 @@ public enum DrinkType
 {
     Coffee,
     HotChocolate,
-    Tea
+    Tea,
+    OrangeJuice
 }
