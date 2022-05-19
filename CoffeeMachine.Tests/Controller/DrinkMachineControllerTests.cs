@@ -23,7 +23,7 @@ public class DrinkMachineControllerTests
     {
         var sampleRecord = new CatalogRecord(DrinkType.Coffee, "A", 0m);
         _catalog.QueryCatalog(Arg.Any<DrinkType>()).Returns(sampleRecord);
-        _drinkOrder = new DrinkOrder(DrinkType.Coffee, 2);
+        _drinkOrder = new DrinkOrder(DrinkType.Coffee, 2, false);
         
         _sut.CreateDrinkMakerCommand(_drinkOrder, 10m);
 
@@ -38,7 +38,7 @@ public class DrinkMachineControllerTests
     {
         var sampleRecord = new CatalogRecord(DrinkType.Coffee, "A", 0m);
         _catalog.QueryCatalog(Arg.Any<DrinkType>()).Returns(sampleRecord);
-        _drinkOrder = new DrinkOrder(DrinkType.Coffee, 2);
+        _drinkOrder = new DrinkOrder(DrinkType.Coffee, 2, false);
 
         _sut.CreateDrinkMakerCommand(_drinkOrder, moneyInserted);
         
@@ -54,7 +54,7 @@ public class DrinkMachineControllerTests
     {
         var sampleRecord = new CatalogRecord(DrinkType.Coffee, "A", 10m);
         _catalog.QueryCatalog(Arg.Any<DrinkType>()).Returns(sampleRecord);
-        _drinkOrder = new DrinkOrder(DrinkType.Coffee, 2);
+        _drinkOrder = new DrinkOrder(DrinkType.Coffee, 2, false);
 
         _sut.CreateDrinkMakerCommand(_drinkOrder, moneyInserted);
         
@@ -72,7 +72,7 @@ public class DrinkMachineControllerTests
         _catalog.QueryCatalog(Arg.Any<DrinkType>()).Returns(sampleRecord);
         var expectedMessage = $"{moneyDifference}";
         _protocolBuilder.BuildMessageCommand(Arg.Any<string>()).Returns(expectedMessage);
-        _drinkOrder = new DrinkOrder(DrinkType.Coffee, 2);
+        _drinkOrder = new DrinkOrder(DrinkType.Coffee, 2, false);
 
         var result = _sut.CreateDrinkMakerCommand(_drinkOrder, moneyInserted);
         
@@ -93,7 +93,7 @@ public class DrinkMachineControllerTests
     [InlineData(DrinkType.Coffee, 1, "C:1:1")]
     public void CreateDrinkMakerCommand_ShouldReturnDrinkProtocol_WhenDrinkOrderIsGivenAndEnoughMoneyIsInserted(DrinkType drinkType, int sugar, string expected)
     {
-        var drink = new DrinkOrder(drinkType, sugar);
+        var drink = new DrinkOrder(drinkType, sugar, false);
         var catalog = new DrinksCatalog();
         var builder = new ProtocolBuilder();
         var sut = new DrinkMachineController(catalog, builder);
