@@ -79,6 +79,12 @@ public class DrinkMachineControllerTests
         Assert.Contains(expectedMessage, result);
     }
     
+   
+    
+    
+    
+    
+    
     // Integration tests:
     [Theory]
     [InlineData(DrinkType.Coffee, 2, "C:2:1")]
@@ -91,6 +97,20 @@ public class DrinkMachineControllerTests
         var catalog = new DrinksCatalog();
         var builder = new ProtocolBuilder();
         var sut = new DrinkMachineController(catalog, builder);
+
+        var result = sut.CreateDrinkMakerCommand(drink, 10m);
+        
+        Assert.Equal(expected, result);
+    }
+    
+    [Fact]
+    public void CreateDrinkMakerCommand_ShouldAddhToDrinkCode_WhenDrinkOrderIsExtraHot()
+    {
+        var drink = new DrinkOrder(DrinkType.Coffee, 2, true);
+        var catalog = new DrinksCatalog();
+        var builder = new ProtocolBuilder();
+        var sut = new DrinkMachineController(catalog, builder);
+        var expected = "Ch:2:1";
 
         var result = sut.CreateDrinkMakerCommand(drink, 10m);
         

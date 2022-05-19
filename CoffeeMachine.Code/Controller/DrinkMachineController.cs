@@ -24,6 +24,7 @@ public class DrinkMachineController
             return _protocolBuilder.BuildMessageCommand(message);
         }
         
+        
         return _protocolBuilder.BuildDrinkCommand(drinkInfo.DrinkCode, drinkRequested.Sugars);
     }
     

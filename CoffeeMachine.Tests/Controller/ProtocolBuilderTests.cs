@@ -16,7 +16,7 @@ public class ProtocolBuilderTests
     [InlineData("A")]
     [InlineData(" ")]
     [InlineData("")]
-    public void BuildDrink_ShouldReturnStringStartingWithDrinkCode_WhenDrinkCodeIsGiven(string drinkCode)
+    public void BuildDrinkCommand_ShouldReturnStringStartingWithDrinkCode_WhenDrinkCodeIsGiven(string drinkCode)
     {
         var result = _sut.BuildDrinkCommand(drinkCode, 1);
         
@@ -27,7 +27,7 @@ public class ProtocolBuilderTests
     [InlineData(0)]
     [InlineData(2)]
     [InlineData(1)]
-    public void BuildDrink_ShouldReturnStringWithSugarQuantityAfterDrinkCode(int sugarQuantity)
+    public void BuildDrinkCommand_ShouldReturnStringWithSugarQuantityAfterDrinkCode(int sugarQuantity)
     {
         var drinkCode = "A";
         
@@ -40,7 +40,7 @@ public class ProtocolBuilderTests
     [InlineData(3)]
     [InlineData(2)]
     [InlineData(99)]
-    public void BuildDrink_ShouldAllowMaximumOfTwoSugars(int sugarQuantity)
+    public void BuildDrinkCommand_ShouldAllowMaximumOfTwoSugars(int sugarQuantity)
     {
         var drinkCode = "A";
         
@@ -52,7 +52,7 @@ public class ProtocolBuilderTests
     [Theory]
     [InlineData(2)]
     [InlineData(1)]
-    public void BuildDrink_ShouldReturnStringEndingWithOne_WhenDrinkContainsSugar(int sugarQuantity)
+    public void BuildDrinkCommand_ShouldReturnStringEndingWithOne_WhenDrinkContainsSugar(int sugarQuantity)
     {
         var drinkCode = "A";
         
@@ -62,7 +62,7 @@ public class ProtocolBuilderTests
     }
     
     [Fact]
-    public void BuildDrink_ShouldReturnStringEndingWithZero_WhenDrinkContainsNoSugar()
+    public void BuildDrinkCommand_ShouldReturnStringEndingWithZero_WhenDrinkContainsNoSugar()
     {
         var drinkCode = "A";
         var sugars = 0;
@@ -75,7 +75,7 @@ public class ProtocolBuilderTests
     [Theory]
     [InlineData("This is a message")]
     [InlineData("This should display on drink maker")]
-    public void BuildMessage_ShouldReturnStringWithAMessage_WhenMessageIsGiven(string message)
+    public void BuildMessageCommand_ShouldReturnStringWithAMessage_WhenMessageIsGiven(string message)
     {
         var messageToDisplay = message;
         
