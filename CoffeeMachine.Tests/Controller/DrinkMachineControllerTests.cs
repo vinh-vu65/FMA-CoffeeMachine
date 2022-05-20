@@ -42,7 +42,7 @@ public class DrinkMachineControllerTests
 
         _sut.CreateDrinkMakerCommand(_drinkOrder, moneyInserted);
         
-        _protocolBuilder.Received(1).BuildDrinkCommand("A", Arg.Any<int>());
+        _protocolBuilder.Received(1).BuildDrinkCommand("A", Arg.Any<DrinkOrder>());
         _protocolBuilder.Received(0).BuildMessageCommand(Arg.Any<string>());
     }
     
@@ -59,7 +59,7 @@ public class DrinkMachineControllerTests
         _sut.CreateDrinkMakerCommand(_drinkOrder, moneyInserted);
         
         _protocolBuilder.Received(1).BuildMessageCommand(Arg.Any<string>());
-        _protocolBuilder.Received(0).BuildDrinkCommand("A", Arg.Any<int>());
+        _protocolBuilder.Received(0).BuildDrinkCommand("A", Arg.Any<DrinkOrder>());
     }
     
     [Theory]
@@ -84,7 +84,6 @@ public class DrinkMachineControllerTests
     [InlineData(DrinkType.Coffee, 2, "C:2:1")]
     [InlineData(DrinkType.HotChocolate, 0, "H:0:0")]
     [InlineData(DrinkType.Tea, 3, "T:2:1")]
-    [InlineData(DrinkType.Coffee, 1, "C:1:1")]
     public void CreateDrinkMakerCommand_ShouldReturnDrinkProtocol_WhenDrinkOrderIsGivenAndEnoughMoneyIsInserted(DrinkType drinkType, int sugar, string expected)
     {
         var drink = new DrinkOrder(drinkType, sugar, false);
@@ -98,12 +97,12 @@ public class DrinkMachineControllerTests
     }
     
     [Theory]
-    [InlineData(DrinkType.Coffee, "Ch:2:1")]
-    [InlineData(DrinkType.Tea, "Th:2:1")]
-    [InlineData(DrinkType.HotChocolate, "Hh:2:1")]
-    public void CreateDrinkMakerCommand_ShouldAddhToDrinkCode_WhenDrinkOrderIsExtraHot(DrinkType drinkType, string expected)
+    [InlineData(DrinkType.Coffee, 2, "Ch:2:1")]
+    [InlineData(DrinkType.HotChocolate, 0, "Hh:0:0")]
+    [InlineData(DrinkType.Tea, 3, "Th:2:1")]
+    public void CreateDrinkMakerCommand_ShouldReturnDrinkProtocolWithH_WhenDrinkOrderIsExtraHotAndEnoughMoneyIsInserted(DrinkType drinkType, int sugar, string expected)
     {
-        var drink = new DrinkOrder(drinkType, 2, true);
+        var drink = new DrinkOrder(drinkType, sugar, true);
         var catalog = new DrinksCatalog();
         var builder = new ProtocolBuilder();
         var sut = new DrinkMachineController(catalog, builder);
@@ -112,7 +111,7 @@ public class DrinkMachineControllerTests
         
         Assert.Equal(expected, result);
     }
-    
+
     [Fact]
     public void CreateDrinkMakerCommand_ShouldDisplayMessageToUserAndNotMakeDrink_WhenOrangeJuiceIsOrderedExtraHot()
     {
