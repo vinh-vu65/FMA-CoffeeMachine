@@ -1,3 +1,4 @@
+using CoffeeMachine.Code.Models;
 using CoffeeMachine.Code.Services;
 using Xunit;
 
@@ -18,7 +19,9 @@ public class ProtocolBuilderTests
     [InlineData("")]
     public void BuildDrinkCommand_ShouldReturnStringStartingWithDrinkCode_WhenDrinkCodeIsGiven(string drinkCode)
     {
-        var result = _sut.BuildDrinkCommand(drinkCode, 1);
+        var drinkOrder = new DrinkOrder(DrinkType.Coffee, 0, false);
+
+        var result = _sut.BuildDrinkCommand(drinkCode, drinkOrder);
         
         Assert.StartsWith(drinkCode, result);
     }
@@ -30,8 +33,9 @@ public class ProtocolBuilderTests
     public void BuildDrinkCommand_ShouldReturnStringWithSugarQuantityAfterDrinkCode(int sugarQuantity)
     {
         var drinkCode = "A";
+        var drinkOrder = new DrinkOrder(DrinkType.Coffee, sugarQuantity, false);
         
-        var result = _sut.BuildDrinkCommand(drinkCode, sugarQuantity);
+        var result = _sut.BuildDrinkCommand(drinkCode, drinkOrder);
         
         Assert.StartsWith($"{drinkCode}:{sugarQuantity}", result);
     }
@@ -43,8 +47,9 @@ public class ProtocolBuilderTests
     public void BuildDrinkCommand_ShouldAllowMaximumOfTwoSugars(int sugarQuantity)
     {
         var drinkCode = "A";
-        
-        var result = _sut.BuildDrinkCommand(drinkCode, sugarQuantity);
+        var drinkOrder = new DrinkOrder(DrinkType.Coffee, sugarQuantity, false);
+
+        var result = _sut.BuildDrinkCommand(drinkCode, drinkOrder);
         
         Assert.StartsWith($"{drinkCode}:2", result);
     }
@@ -55,8 +60,9 @@ public class ProtocolBuilderTests
     public void BuildDrinkCommand_ShouldReturnStringEndingWithOne_WhenDrinkContainsSugar(int sugarQuantity)
     {
         var drinkCode = "A";
-        
-        var result = _sut.BuildDrinkCommand(drinkCode, sugarQuantity);
+        var drinkOrder = new DrinkOrder(DrinkType.Coffee, sugarQuantity, false);
+
+        var result = _sut.BuildDrinkCommand(drinkCode, drinkOrder);
         
         Assert.Equal($"{drinkCode}:{sugarQuantity}:1", result);
     }
@@ -65,11 +71,12 @@ public class ProtocolBuilderTests
     public void BuildDrinkCommand_ShouldReturnStringEndingWithZero_WhenDrinkContainsNoSugar()
     {
         var drinkCode = "A";
-        var sugars = 0;
+        var sugarQuantity = 0;
+        var drinkOrder = new DrinkOrder(DrinkType.Coffee, sugarQuantity, false);
+
+        var result = _sut.BuildDrinkCommand(drinkCode, drinkOrder);
         
-        var result = _sut.BuildDrinkCommand(drinkCode, sugars);
-        
-        Assert.Equal($"{drinkCode}:{sugars}:0", result);
+        Assert.Equal($"{drinkCode}:{sugarQuantity}:0", result);
     }
     
     [Theory]
@@ -82,5 +89,19 @@ public class ProtocolBuilderTests
         var result = _sut.BuildMessageCommand(messageToDisplay);
         
         Assert.Equal($"M:{message}", result);
+    }
+
+    [Theory]
+    [InlineData(DrinkType.Coffee)]
+    [InlineData(DrinkType.Tea)]
+    [InlineData(DrinkType.HotChocolate)]
+    public void BuildDrinkCommand_ShouldAddhToDrinkCode_WhenGivenDrinkOrderIsExtraHot(DrinkType drinkType)
+    {
+        var drinkOrder = new DrinkOrder(drinkType, 0, true);
+        var baseDrinkCode = "A";
+
+        var result = _sut.BuildDrinkCommand(baseDrinkCode, drinkOrder);
+        
+        Assert.Equal($"Ah:0:0", result);
     }
 }
