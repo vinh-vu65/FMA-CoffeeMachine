@@ -30,12 +30,7 @@ public class DrinkMachineController
             return _protocolBuilder.BuildMessageCommand(message);
         }
 
-        var drinkCode = drinkInfo.DrinkCode;
-        if (drinkRequested.IsExtraHot)
-        {
-            drinkCode += "h";
-        }
-        return _protocolBuilder.BuildDrinkCommand(drinkCode, drinkRequested.Sugars);
+        return _protocolBuilder.BuildDrinkCommand(drinkInfo.DrinkCode, drinkRequested);
     }
     
     private CatalogRecord GetDrinkInfo(DrinkOrder drinkRequested)
