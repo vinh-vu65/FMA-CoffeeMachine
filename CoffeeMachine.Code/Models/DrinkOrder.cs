@@ -4,7 +4,7 @@ public class DrinkOrder
 {
     public DrinkType DrinkType { get; }
     public int Sugars { get; }
-    public bool IsExtraHot { get; set; }
+    public bool IsExtraHot { get; }
 
     public DrinkOrder(DrinkType drinkType, int sugars, bool isExtraHot)
     {
