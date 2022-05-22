@@ -1,4 +1,4 @@
-namespace CoffeeMachine.Code.Controller;
+namespace CoffeeMachine.Code.Services;
 
 public interface IProtocolBuilder
 {
