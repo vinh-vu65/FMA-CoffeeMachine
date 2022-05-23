@@ -1,4 +1,3 @@
-using CoffeeMachine.Code.Controller;
 using CoffeeMachine.Code.Models;
 
 namespace CoffeeMachine.Code.Services;

@@ -63,12 +63,12 @@ public class DrinkMachineControllerTests
     }
     
     [Theory]
-    [InlineData(1.0, 9)]
-    [InlineData(9.99, 0.01)]
-    [InlineData(0.1, 9.9)]
-    public void CreateDrinkMakerCommand_ShouldIncludeRemainingMoneyRequired_WhenInsufficientMoneyIsInserted(decimal moneyInserted, decimal moneyDifference)
+    [InlineData(1.0, 10, 9)]
+    [InlineData(9.99, 10, 0.01)]
+    [InlineData(0.1, 10, 9.9)]
+    public void CreateDrinkMakerCommand_ShouldIncludeRemainingMoneyRequired_WhenInsufficientMoneyIsInserted(decimal moneyInserted, decimal price, decimal moneyDifference)
     {
-        var sampleRecord = new CatalogRecord(DrinkType.Coffee, "A", 10m);
+        var sampleRecord = new CatalogRecord(DrinkType.Coffee, "A", price);
         _catalog.QueryCatalog(Arg.Any<DrinkType>()).Returns(sampleRecord);
         var expectedMessage = $"{moneyDifference}";
         _protocolBuilder.BuildMessageCommand(Arg.Any<string>()).Returns(expectedMessage);
