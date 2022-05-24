@@ -13,6 +13,7 @@ public class DrinkMachineControllerTests
     private readonly IDrinksCatalog _catalog = Substitute.For<IDrinksCatalog>();
     private readonly IProtocolBuilder _protocolBuilder = Substitute.For<IProtocolBuilder>();
     private readonly IDrinkMaker _drinkMaker = Substitute.For<IDrinkMaker>();
+    private readonly IReportGenerator _reportGenerator = Substitute.For<IReportGenerator>();
 
     public DrinkMachineControllerTests()
     {
@@ -130,10 +131,18 @@ public class DrinkMachineControllerTests
         var moneyInserted = 10m;
         var sampleRecord = new CatalogRecord(DrinkType.Coffee, "A", 0m);
         _catalog.QueryCatalog(Arg.Any<DrinkType>()).Returns(sampleRecord);
-
+        
         _sut.ManageDrinkOrder(_drinkOrder, moneyInserted);
         
         _protocolBuilder.Received(1).BuildDrinkCommand("A", Arg.Any<DrinkOrder>());
         Assert.Equal(1, _sut.DrinkHistory.Count);
+    }
+
+    [Fact]
+    public void PrintDrinkHistory_ShouldCallReportGeneratorGenerateHistory_WhenCalled()
+    {
+        _sut.PrintDrinkHistory();
+
+        _reportGenerator.Received(1).GenerateHistory(_sut.DrinkHistory);
     }
 }
