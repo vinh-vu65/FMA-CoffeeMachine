@@ -17,7 +17,7 @@ public class DrinkMachineControllerTests
 
     public DrinkMachineControllerTests()
     {
-        _sut = new DrinkMachineController(_catalog, _protocolBuilder, _drinkMaker);
+        _sut = new DrinkMachineController(_catalog, _protocolBuilder, _drinkMaker, _reportGenerator);
         _drinkOrder = new DrinkOrder(DrinkType.Coffee, 2, false);
     }
 
@@ -88,7 +88,7 @@ public class DrinkMachineControllerTests
         var drink = new DrinkOrder(drinkType, sugar, false);
         var catalog = new DrinksCatalog();
         var builder = new ProtocolBuilder();
-        var sut = new DrinkMachineController(catalog, builder, _drinkMaker);
+        var sut = new DrinkMachineController(catalog, builder, _drinkMaker, _reportGenerator);
 
         sut.ManageDrinkOrder(drink, 10m);
         
@@ -104,7 +104,7 @@ public class DrinkMachineControllerTests
         var drink = new DrinkOrder(drinkType, sugar, true);
         var catalog = new DrinksCatalog();
         var builder = new ProtocolBuilder();
-        var sut = new DrinkMachineController(catalog, builder, _drinkMaker);
+        var sut = new DrinkMachineController(catalog, builder, _drinkMaker, _reportGenerator);
 
         sut.ManageDrinkOrder(drink, 10m);
         
@@ -116,7 +116,7 @@ public class DrinkMachineControllerTests
     {
         var drink = new DrinkOrder(DrinkType.OrangeJuice, 2, true);
         var catalog = new DrinksCatalog();
-        var sut = new DrinkMachineController(catalog, _protocolBuilder, _drinkMaker);
+        var sut = new DrinkMachineController(catalog, _protocolBuilder, _drinkMaker, _reportGenerator);
         var message = "Can't make a hot orange juice";
         _protocolBuilder.BuildMessageCommand(Arg.Any<string>()).Returns(message);
 
