@@ -2,7 +2,7 @@ using CoffeeMachine.Code.Models;
 using CoffeeMachine.Code.Services;
 using Xunit;
 
-namespace CoffeeMachine.Tests.Controller;
+namespace CoffeeMachine.Tests.Services;
 
 public class ProtocolBuilderTests
 {
