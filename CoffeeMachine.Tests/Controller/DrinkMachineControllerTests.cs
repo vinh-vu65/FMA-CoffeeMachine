@@ -21,7 +21,7 @@ public class DrinkMachineControllerTests
     }
 
     [Fact]
-    public void CreateDrinkMakerCommand_ShouldCallQueryCatalogMethod()
+    public void ManageDrinkOrder_ShouldCallQueryCatalogMethod()
     {
         var sampleRecord = new CatalogRecord(DrinkType.Coffee, "A", 0m);
         _catalog.QueryCatalog(Arg.Any<DrinkType>()).Returns(sampleRecord);
@@ -35,7 +35,7 @@ public class DrinkMachineControllerTests
     [InlineData(1.0)]
     [InlineData(10)]
     [InlineData(0.1)]
-    public void CreateDrinkMakerCommand_ShouldCallProtocolBuildDrink_WhenSufficientMoneyIsInserted(decimal moneyInserted)
+    public void ManageDrinkOrder_ShouldCallProtocolBuildDrink_WhenSufficientMoneyIsInserted(decimal moneyInserted)
     {
         var sampleRecord = new CatalogRecord(DrinkType.Coffee, "A", 0m);
         _catalog.QueryCatalog(Arg.Any<DrinkType>()).Returns(sampleRecord);
@@ -50,7 +50,7 @@ public class DrinkMachineControllerTests
     [InlineData(1.0)]
     [InlineData(9.99)]
     [InlineData(0.1)]
-    public void CreateDrinkMakerCommand_ShouldCallProtocolBuildMessage_WhenInsufficientMoneyIsInserted(decimal moneyInserted)
+    public void ManageDrinkOrder_ShouldCallProtocolBuildMessage_WhenInsufficientMoneyIsInserted(decimal moneyInserted)
     {
         var sampleRecord = new CatalogRecord(DrinkType.Coffee, "A", 10m);
         _catalog.QueryCatalog(Arg.Any<DrinkType>()).Returns(sampleRecord);
@@ -65,7 +65,7 @@ public class DrinkMachineControllerTests
     [InlineData(1.0, 10, 9)]
     [InlineData(9.99, 10, 0.01)]
     [InlineData(0.1, 10, 9.9)]
-    public void CreateDrinkMakerCommand_ShouldIncludeRemainingMoneyRequired_WhenInsufficientMoneyIsInserted(decimal moneyInserted, decimal price, decimal moneyDifference)
+    public void ManageDrinkOrder_ShouldIncludeRemainingMoneyRequired_WhenInsufficientMoneyIsInserted(decimal moneyInserted, decimal price, decimal moneyDifference)
     {
         var sampleRecord = new CatalogRecord(DrinkType.Coffee, "A", price);
         _catalog.QueryCatalog(Arg.Any<DrinkType>()).Returns(sampleRecord);
@@ -82,7 +82,7 @@ public class DrinkMachineControllerTests
     [InlineData(DrinkType.Coffee, 2, "C:2:1")]
     [InlineData(DrinkType.HotChocolate, 0, "H:0:0")]
     [InlineData(DrinkType.Tea, 3, "T:2:1")]
-    public void CreateDrinkMakerCommand_ShouldReturnDrinkProtocol_WhenDrinkOrderIsGivenAndEnoughMoneyIsInserted(DrinkType drinkType, int sugar, string expected)
+    public void ManageDrinkOrder_ShouldReturnDrinkProtocol_WhenDrinkOrderIsGivenAndEnoughMoneyIsInserted(DrinkType drinkType, int sugar, string expected)
     {
         var drink = new DrinkOrder(drinkType, sugar, false);
         var catalog = new DrinksCatalog();
@@ -98,7 +98,7 @@ public class DrinkMachineControllerTests
     [InlineData(DrinkType.Coffee, 2, "Ch:2:1")]
     [InlineData(DrinkType.HotChocolate, 0, "Hh:0:0")]
     [InlineData(DrinkType.Tea, 3, "Th:2:1")]
-    public void CreateDrinkMakerCommand_ShouldReturnDrinkProtocolWithH_WhenDrinkOrderIsExtraHotAndEnoughMoneyIsInserted(DrinkType drinkType, int sugar, string expected)
+    public void ManageDrinkOrder_ShouldReturnDrinkProtocolWithH_WhenDrinkOrderIsExtraHotAndEnoughMoneyIsInserted(DrinkType drinkType, int sugar, string expected)
     {
         var drink = new DrinkOrder(drinkType, sugar, true);
         var catalog = new DrinksCatalog();
@@ -111,7 +111,7 @@ public class DrinkMachineControllerTests
     }
 
     [Fact]
-    public void CreateDrinkMakerCommand_ShouldDisplayMessageToUserAndNotMakeDrink_WhenOrangeJuiceIsOrderedExtraHot()
+    public void ManageDrinkOrder_ShouldDisplayMessageToUserAndNotMakeDrink_WhenOrangeJuiceIsOrderedExtraHot()
     {
         var drink = new DrinkOrder(DrinkType.OrangeJuice, 2, true);
         var catalog = new DrinksCatalog();
