@@ -123,4 +123,17 @@ public class DrinkMachineControllerTests
 
         _drinkMaker.Received(1).SendCommand(message);
     }
+
+    [Fact]
+    public void ManageDrinkOrder_ShouldAddDrinkToDrinkHistory_WhenDrinkOrderIsSuccessful()
+    {
+        var moneyInserted = 10m;
+        var sampleRecord = new CatalogRecord(DrinkType.Coffee, "A", 0m);
+        _catalog.QueryCatalog(Arg.Any<DrinkType>()).Returns(sampleRecord);
+
+        _sut.ManageDrinkOrder(_drinkOrder, moneyInserted);
+        
+        _protocolBuilder.Received(1).BuildDrinkCommand("A", Arg.Any<DrinkOrder>());
+        Assert.Equal(1, _sut.DrinkHistory.Count);
+    }
 }
