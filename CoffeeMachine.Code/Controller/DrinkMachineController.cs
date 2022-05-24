@@ -5,6 +5,7 @@ namespace CoffeeMachine.Code.Controller;
 
 public class DrinkMachineController
 {
+    public List<(DrinkOrder, DateTime)> DrinkHistory { get; }
     private readonly IDrinksCatalog _catalog;
     private readonly IProtocolBuilder _protocolBuilder;
     private readonly IDrinkMaker _drinkMaker;
@@ -14,6 +15,7 @@ public class DrinkMachineController
         _catalog = catalog;
         _protocolBuilder = protocolBuilder;
         _drinkMaker = drinkMaker;
+        DrinkHistory = new List<(DrinkOrder, DateTime)>();
     }
     
     public void ManageDrinkOrder(DrinkOrder drinkRequested, decimal moneyInserted)
@@ -34,6 +36,7 @@ public class DrinkMachineController
             return;
         }
 
+        DrinkHistory.Add((drinkRequested, DateTime.Now));
         _drinkMaker.SendCommand(_protocolBuilder.BuildDrinkCommand(drinkInfo.DrinkCode, drinkRequested));
     }
     
