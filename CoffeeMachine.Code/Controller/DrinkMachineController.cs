@@ -9,12 +9,14 @@ public class DrinkMachineController
     private readonly IDrinksCatalog _catalog;
     private readonly IProtocolBuilder _protocolBuilder;
     private readonly IDrinkMaker _drinkMaker;
+    private readonly IReportGenerator _reportGenerator;
 
-    public DrinkMachineController(IDrinksCatalog catalog, IProtocolBuilder protocolBuilder, IDrinkMaker drinkMaker)
+    public DrinkMachineController(IDrinksCatalog catalog, IProtocolBuilder protocolBuilder, IDrinkMaker drinkMaker, IReportGenerator reportGenerator)
     {
         _catalog = catalog;
         _protocolBuilder = protocolBuilder;
         _drinkMaker = drinkMaker;
+        _reportGenerator = reportGenerator;
         DrinkHistory = new List<(DrinkOrder, DateTime)>();
     }
     
@@ -43,5 +45,10 @@ public class DrinkMachineController
     private CatalogRecord GetDrinkInfo(DrinkOrder drinkRequested)
     {
         return _catalog.QueryCatalog(drinkRequested.DrinkType);
+    }
+
+    public void PrintDrinkHistory()
+    {
+        Console.WriteLine(_reportGenerator.GenerateHistory(DrinkHistory));
     }
 }
