@@ -1,4 +1,4 @@
-namespace CoffeeMachine.Code.Services;
+namespace CoffeeMachine.Code.Models;
 
 public interface IDrinkMaker
 {
