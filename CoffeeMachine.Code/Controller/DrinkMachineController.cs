@@ -49,6 +49,6 @@ public class DrinkMachineController
 
     public void PrintDrinkHistory()
     {
-        Console.WriteLine(_reportGenerator.GenerateHistory(DrinkHistory));
+        Console.WriteLine(_reportGenerator.GenerateHistory(DrinkHistory, DateTime.Today));
     }
 }

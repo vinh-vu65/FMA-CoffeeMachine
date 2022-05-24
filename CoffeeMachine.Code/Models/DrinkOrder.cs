@@ -12,4 +12,10 @@ public class DrinkOrder
         Sugars = sugars;
         IsExtraHot = isExtraHot;
     }
+
+    public override string ToString()
+    {
+        var hot = IsExtraHot ? "Extra hot" : "Regular";
+        return $"{DrinkType.ToString()}, {Sugars} sugar, {hot}";
+    }
 }

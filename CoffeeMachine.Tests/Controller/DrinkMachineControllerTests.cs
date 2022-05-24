@@ -1,3 +1,4 @@
+using System;
 using CoffeeMachine.Code.Controller;
 using CoffeeMachine.Code.Models;
 using CoffeeMachine.Code.Services;
@@ -135,7 +136,7 @@ public class DrinkMachineControllerTests
         _sut.ManageDrinkOrder(_drinkOrder, moneyInserted);
         
         _protocolBuilder.Received(1).BuildDrinkCommand("A", Arg.Any<DrinkOrder>());
-        Assert.Equal(1, _sut.DrinkHistory.Count);
+        Assert.Single(_sut.DrinkHistory);
     }
 
     [Fact]
@@ -143,6 +144,6 @@ public class DrinkMachineControllerTests
     {
         _sut.PrintDrinkHistory();
 
-        _reportGenerator.Received(1).GenerateHistory(_sut.DrinkHistory);
+        _reportGenerator.Received(1).GenerateHistory(_sut.DrinkHistory, DateTime.Today);
     }
 }
