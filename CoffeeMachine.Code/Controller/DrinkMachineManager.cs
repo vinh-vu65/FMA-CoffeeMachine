@@ -11,35 +11,39 @@ public class DrinkMachineManager
     private readonly IDrinkMaker _drinkMaker;
     private readonly IReportGenerator _reportGenerator;
     private readonly IBeverageQuantityChecker _quantityChecker;
+    private readonly IEmailNotifier _emailNotifier;
 
-    public DrinkMachineManager(IDrinksCatalog catalog, IProtocolBuilder protocolBuilder, IDrinkMaker drinkMaker, IReportGenerator reportGenerator, IBeverageQuantityChecker quantityChecker)
+    public DrinkMachineManager(IDrinksCatalog catalog, IProtocolBuilder protocolBuilder, IDrinkMaker drinkMaker, 
+        IReportGenerator reportGenerator, IBeverageQuantityChecker quantityChecker, IEmailNotifier emailNotifier)
     {
         _catalog = catalog;
         _protocolBuilder = protocolBuilder;
         _drinkMaker = drinkMaker;
         _reportGenerator = reportGenerator;
         _quantityChecker = quantityChecker;
+        _emailNotifier = emailNotifier;
         DrinkHistory = new List<(DrinkOrder, DateTime, decimal)>();
     }
     
     public void ManageDrinkOrder(DrinkOrder drinkRequested, decimal moneyInserted)
     {
-        if (_quantityChecker.IsEmpty(drinkRequested.DrinkType))
-        {
-            var message = "Sorry, the drink you have ordered is currently unavailable, an email has been sent to your" +
-                          "office administrator to refill the drink machine, please enter a new drink order.";
-            _drinkMaker.SendCommand(_protocolBuilder.BuildMessageCommand(message));
-            return;
-        }
-        
-        var drinkInfo = GetDrinkInfo(drinkRequested);
-
-        if (drinkRequested.IsExtraHot && drinkInfo.DrinkType == DrinkType.OrangeJuice)
+        if (drinkRequested.IsExtraHot && drinkRequested.DrinkType == DrinkType.OrangeJuice)
         {
             var message = "Selected drink cannot be made extra hot, please enter a new drink order.";
             _drinkMaker.SendCommand(_protocolBuilder.BuildMessageCommand(message));
             return;
         }
+        
+        if (_quantityChecker.IsEmpty(drinkRequested.DrinkType))
+        {
+            var message = "Sorry, the drink you have ordered is currently unavailable, an email has been sent to your" +
+                          "office administrator to refill the drink machine, please enter a new drink order.";
+            _drinkMaker.SendCommand(_protocolBuilder.BuildMessageCommand(message));
+            _emailNotifier.NotifyMissingDrink(drinkRequested.DrinkType);
+            return;
+        }
+        
+        var drinkInfo = GetDrinkInfo(drinkRequested);
         
         if (moneyInserted < drinkInfo.Price)
         {

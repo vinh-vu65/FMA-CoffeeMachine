@@ -142,7 +142,7 @@ public class DrinkMachineManagerTests
     }
 
     [Fact]
-    public void PrintSalesHistory_ShouldCallReportGeneratorGenerateHistory_WhenDateIsGiven()
+    public void PrintSalesHistory_ShouldCallReportGeneratorGenerateHistoryReport_WhenDateIsGiven()
     {
         var requestedDate = DateTime.Today;
         _sut.PrintSalesHistory(requestedDate);
@@ -151,7 +151,7 @@ public class DrinkMachineManagerTests
     }
     
     [Fact]
-    public void PrintSalesSummary_ShouldCallReportGeneratorGenerateHistory_WhenDateIsGiven()
+    public void PrintSalesSummary_ShouldCallReportGeneratorGenerateSummaryReport_WhenDateIsGiven()
     {
         var requestedDate = DateTime.Today;
         _sut.PrintSalesSummary(requestedDate);
