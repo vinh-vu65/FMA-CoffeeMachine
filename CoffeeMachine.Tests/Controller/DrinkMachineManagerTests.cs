@@ -15,10 +15,11 @@ public class DrinkMachineManagerTests
     private readonly IProtocolBuilder _protocolBuilder = Substitute.For<IProtocolBuilder>();
     private readonly IDrinkMaker _drinkMaker = Substitute.For<IDrinkMaker>();
     private readonly IReportGenerator _reportGenerator = Substitute.For<IReportGenerator>();
+    private readonly IBeverageQuantityChecker _quantityChecker = Substitute.For<IBeverageQuantityChecker>();
 
     public DrinkMachineManagerTests()
     {
-        _sut = new DrinkMachineManager(_catalog, _protocolBuilder, _drinkMaker, _reportGenerator);
+        _sut = new DrinkMachineManager(_catalog, _protocolBuilder, _drinkMaker, _reportGenerator, _quantityChecker);
         _drinkOrder = new DrinkOrder(DrinkType.Coffee, 2, false);
     }
 
@@ -155,5 +156,19 @@ public class DrinkMachineManagerTests
         _sut.PrintSalesSummary(requestedDate);
 
         _reportGenerator.Received(1).GenerateSummaryReport(_sut.DrinkHistory, requestedDate);
+    }
+
+    [Fact]
+    public void ManageDrinkOrder_ShouldSendMessageToDrinkMaker_WhenDrinkIsEmpty()
+    {
+        var sampleRecord = new CatalogRecord(DrinkType.Coffee, "A", 0m);
+        _catalog.QueryCatalog(Arg.Any<DrinkType>()).Returns(sampleRecord);
+        _quantityChecker.IsEmpty(Arg.Any<DrinkType>()).Returns(true);
+        var message = "Drink is empty";
+        _protocolBuilder.BuildMessageCommand(Arg.Any<string>()).Returns(message);
+        
+        _sut.ManageDrinkOrder(_drinkOrder, 10m);
+        
+        _drinkMaker.Received(1).SendCommand(message);
     }
 }
