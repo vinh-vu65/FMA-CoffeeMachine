@@ -10,18 +10,28 @@ public class DrinkMachineManager
     private readonly IProtocolBuilder _protocolBuilder;
     private readonly IDrinkMaker _drinkMaker;
     private readonly IReportGenerator _reportGenerator;
+    private readonly IBeverageQuantityChecker _quantityChecker;
 
-    public DrinkMachineManager(IDrinksCatalog catalog, IProtocolBuilder protocolBuilder, IDrinkMaker drinkMaker, IReportGenerator reportGenerator)
+    public DrinkMachineManager(IDrinksCatalog catalog, IProtocolBuilder protocolBuilder, IDrinkMaker drinkMaker, IReportGenerator reportGenerator, IBeverageQuantityChecker quantityChecker)
     {
         _catalog = catalog;
         _protocolBuilder = protocolBuilder;
         _drinkMaker = drinkMaker;
         _reportGenerator = reportGenerator;
+        _quantityChecker = quantityChecker;
         DrinkHistory = new List<(DrinkOrder, DateTime, decimal)>();
     }
     
     public void ManageDrinkOrder(DrinkOrder drinkRequested, decimal moneyInserted)
     {
+        if (_quantityChecker.IsEmpty(drinkRequested.DrinkType))
+        {
+            var message = "Sorry, the drink you have ordered is currently unavailable, an email has been sent to your" +
+                          "office administrator to refill the drink machine, please enter a new drink order.";
+            _drinkMaker.SendCommand(_protocolBuilder.BuildMessageCommand(message));
+            return;
+        }
+        
         var drinkInfo = GetDrinkInfo(drinkRequested);
 
         if (drinkRequested.IsExtraHot && drinkInfo.DrinkType == DrinkType.OrangeJuice)
