@@ -3,21 +3,21 @@ using CoffeeMachine.Code.Services;
 
 namespace CoffeeMachine.Code.Controller;
 
-public class DrinkMachineController
+public class DrinkMachineManager
 {
-    public List<(DrinkOrder, DateTime)> DrinkHistory { get; }
+    public List<(DrinkOrder, DateTime, decimal)> DrinkHistory { get; }
     private readonly IDrinksCatalog _catalog;
     private readonly IProtocolBuilder _protocolBuilder;
     private readonly IDrinkMaker _drinkMaker;
     private readonly IReportGenerator _reportGenerator;
 
-    public DrinkMachineController(IDrinksCatalog catalog, IProtocolBuilder protocolBuilder, IDrinkMaker drinkMaker, IReportGenerator reportGenerator)
+    public DrinkMachineManager(IDrinksCatalog catalog, IProtocolBuilder protocolBuilder, IDrinkMaker drinkMaker, IReportGenerator reportGenerator)
     {
         _catalog = catalog;
         _protocolBuilder = protocolBuilder;
         _drinkMaker = drinkMaker;
         _reportGenerator = reportGenerator;
-        DrinkHistory = new List<(DrinkOrder, DateTime)>();
+        DrinkHistory = new List<(DrinkOrder, DateTime, decimal)>();
     }
     
     public void ManageDrinkOrder(DrinkOrder drinkRequested, decimal moneyInserted)
@@ -38,7 +38,7 @@ public class DrinkMachineController
             return;
         }
 
-        DrinkHistory.Add((drinkRequested, DateTime.Now));
+        DrinkHistory.Add((drinkRequested, DateTime.Now, drinkInfo.Price));
         _drinkMaker.SendCommand(_protocolBuilder.BuildDrinkCommand(drinkInfo.DrinkCode, drinkRequested));
     }
     
@@ -47,8 +47,13 @@ public class DrinkMachineController
         return _catalog.QueryCatalog(drinkRequested.DrinkType);
     }
 
-    public void PrintDrinkHistory()
+    public void PrintSalesHistory(DateTime date)
     {
-        Console.WriteLine(_reportGenerator.GenerateHistory(DrinkHistory, DateTime.Today));
+        Console.WriteLine(_reportGenerator.GenerateHistoryReport(DrinkHistory, date));
+    }
+
+    public void PrintSalesSummary(DateTime date)
+    {
+        Console.WriteLine(_reportGenerator.GenerateSummaryReport(DrinkHistory, date));
     }
 }

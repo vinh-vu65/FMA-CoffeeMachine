@@ -9,24 +9,27 @@ namespace CoffeeMachine.Tests.Services;
 public class ReportGeneratorTests
 {
     private ReportGenerator _sut;
-    private List<(DrinkOrder, DateTime)> _sampleHistory;
-    private readonly DrinkOrder _drink = new DrinkOrder(DrinkType.Coffee, 2, false);
+    private List<(DrinkOrder, DateTime, decimal)> _sampleHistory;
+    private readonly DrinkOrder _coffee = new(DrinkType.Coffee, 2, false);
+    private readonly DrinkOrder _tea = new(DrinkType.Tea, 2, false);
+    private readonly DrinkOrder _hotChocolate = new(DrinkType.HotChocolate, 2, false);
+
     
     public ReportGeneratorTests()
     {
         _sut = new ReportGenerator();
-        _sampleHistory = new List<(DrinkOrder, DateTime)>
+        _sampleHistory = new List<(DrinkOrder, DateTime, decimal)>
         {
-            (_drink, DateTime.Now),
-            (_drink, DateTime.Now),
-            (_drink, DateTime.Now)
+            (_coffee, DateTime.Now, 3m),
+            (_coffee, DateTime.Now, 3m),
+            (_coffee, DateTime.Now, 3m)
         };
     }
     
     [Fact]
-    public void GenerateHistory_ShouldReturnAllDrinksSoldInThatDay_WhenGivenDrinkHistoryAndDate()
+    public void GenerateHistoryReport_ShouldIncludeAllDrinksSoldInThatDay_WhenGivenDrinkHistoryAndDate()
     {
-        var result = _sut.GenerateHistory(_sampleHistory, DateTime.Today);
+        var result = _sut.GenerateHistoryReport(_sampleHistory, DateTime.Today);
 
         Assert.Contains(_sampleHistory[0].Item1.ToString(), result);
         Assert.Contains(_sampleHistory[1].Item1.ToString(), result);
@@ -34,9 +37,9 @@ public class ReportGeneratorTests
     }
     
     [Fact]
-    public void GenerateHistory_ShouldReturnAllDrinkTimeStampsSoldInThatDay_WhenGivenDrinkHistoryAndDate()
+    public void GenerateHistoryReport_ShouldIncludeAllDrinkTimeStampsSoldInThatDay_WhenGivenDrinkHistoryAndDate()
     {
-        var result = _sut.GenerateHistory(_sampleHistory, DateTime.Today);
+        var result = _sut.GenerateHistoryReport(_sampleHistory, DateTime.Today);
 
         Assert.Contains(_sampleHistory[0].Item2.ToString("dddd, dd MMMM yyyy hh:mm tt"), result);
         Assert.Contains(_sampleHistory[1].Item2.ToString("dddd, dd MMMM yyyy hh:mm tt"), result);
@@ -44,12 +47,58 @@ public class ReportGeneratorTests
     }
 
     [Fact]
-    public void GenerateHistory_ShouldNotIncludeDrinks_WhenDaySoldDoesNotMatchDayGiven()
+    public void GenerateHistoryReport_ShouldNotIncludeDrinks_WhenDaySoldDoesNotMatchDayGiven()
     {
-        var result = _sut.GenerateHistory(_sampleHistory, DateTime.MinValue);
+        var result = _sut.GenerateHistoryReport(_sampleHistory, DateTime.MinValue);
         
         Assert.DoesNotContain(_sampleHistory[0].Item1.ToString(), result);
         Assert.DoesNotContain(_sampleHistory[1].Item1.ToString(), result);
         Assert.DoesNotContain(_sampleHistory[2].Item1.ToString(), result);
+    }
+
+    [Fact]
+    public void GetSalesSummary_ShouldIncludeNumberOfEachDrinkTypeSold_WhenGivenDrinkHistoryAndDate()
+    {
+        var expectedCoffeeQuantity = 3;
+        var expectedTeaQuantity = 1;
+        _sampleHistory.Add((_tea, DateTime.Now, 10m));
+
+        var result = _sut.CreateSalesSummary(_sampleHistory, DateTime.Today);
+        
+        Assert.Equal(expectedCoffeeQuantity, result[0].Quantity);
+        Assert.Equal(expectedTeaQuantity, result[1].Quantity);
+    }
+    
+    [Fact]
+    public void GetSalesSummary_ShouldIncludeRevenueOfEachDrinkTypeSold_WhenGivenDrinkHistoryAndDate()
+    {
+        var expectedCoffeeRevenue = 9;
+        var expectedHotChocRevenue = 10;
+        _sampleHistory.Add((_hotChocolate, DateTime.Now, 10m));
+
+        var result = _sut.CreateSalesSummary(_sampleHistory, DateTime.Today);
+        
+        Assert.Equal(expectedCoffeeRevenue, result[0].Revenue);
+        Assert.Equal(expectedHotChocRevenue, result[1].Revenue);
+    }
+
+    [Fact]
+    public void GetSalesSummary_ShouldReturnEmptyList_WhenNoSalesHaveBeenMadeOnGivenDate()
+    {
+        var result = _sut.CreateSalesSummary(_sampleHistory, DateTime.MinValue);
+        
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void CalculateTotalRevenue_ShouldReturnSumOfAllRevenue_WhenGivenSalesSummary()
+    {
+        _sampleHistory.Add((_hotChocolate, DateTime.Now, 10m));
+        var salesSummary = _sut.CreateSalesSummary(_sampleHistory, DateTime.Today);
+        var expectedTotalRevenue = 19;
+
+        var result = _sut.CalculateTotalRevenue(salesSummary);
+        
+        Assert.Equal(expectedTotalRevenue, result);
     }
 }
