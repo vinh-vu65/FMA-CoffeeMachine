@@ -7,18 +7,18 @@ using Xunit;
 
 namespace CoffeeMachine.Tests.Controller;
 
-public class DrinkMachineControllerTests
+public class DrinkMachineManagerTests
 {
     private DrinkOrder _drinkOrder;
-    private readonly DrinkMachineController _sut;
+    private readonly DrinkMachineManager _sut;
     private readonly IDrinksCatalog _catalog = Substitute.For<IDrinksCatalog>();
     private readonly IProtocolBuilder _protocolBuilder = Substitute.For<IProtocolBuilder>();
     private readonly IDrinkMaker _drinkMaker = Substitute.For<IDrinkMaker>();
     private readonly IReportGenerator _reportGenerator = Substitute.For<IReportGenerator>();
 
-    public DrinkMachineControllerTests()
+    public DrinkMachineManagerTests()
     {
-        _sut = new DrinkMachineController(_catalog, _protocolBuilder, _drinkMaker, _reportGenerator);
+        _sut = new DrinkMachineManager(_catalog, _protocolBuilder, _drinkMaker, _reportGenerator);
         _drinkOrder = new DrinkOrder(DrinkType.Coffee, 2, false);
     }
 
@@ -89,7 +89,7 @@ public class DrinkMachineControllerTests
         var drink = new DrinkOrder(drinkType, sugar, false);
         var catalog = new DrinksCatalog();
         var builder = new ProtocolBuilder();
-        var sut = new DrinkMachineController(catalog, builder, _drinkMaker, _reportGenerator);
+        var sut = new DrinkMachineManager(catalog, builder, _drinkMaker, _reportGenerator);
 
         sut.ManageDrinkOrder(drink, 10m);
         
@@ -105,7 +105,7 @@ public class DrinkMachineControllerTests
         var drink = new DrinkOrder(drinkType, sugar, true);
         var catalog = new DrinksCatalog();
         var builder = new ProtocolBuilder();
-        var sut = new DrinkMachineController(catalog, builder, _drinkMaker, _reportGenerator);
+        var sut = new DrinkMachineManager(catalog, builder, _drinkMaker, _reportGenerator);
 
         sut.ManageDrinkOrder(drink, 10m);
         
@@ -117,7 +117,7 @@ public class DrinkMachineControllerTests
     {
         var drink = new DrinkOrder(DrinkType.OrangeJuice, 2, true);
         var catalog = new DrinksCatalog();
-        var sut = new DrinkMachineController(catalog, _protocolBuilder, _drinkMaker, _reportGenerator);
+        var sut = new DrinkMachineManager(catalog, _protocolBuilder, _drinkMaker, _reportGenerator);
         var message = "Can't make a hot orange juice";
         _protocolBuilder.BuildMessageCommand(Arg.Any<string>()).Returns(message);
 
@@ -140,10 +140,20 @@ public class DrinkMachineControllerTests
     }
 
     [Fact]
-    public void PrintDrinkHistory_ShouldCallReportGeneratorGenerateHistory_WhenCalled()
+    public void PrintSalesHistory_ShouldCallReportGeneratorGenerateHistory_WhenDateIsGiven()
     {
-        _sut.PrintDrinkHistory();
+        var requestedDate = DateTime.Today;
+        _sut.PrintSalesHistory(requestedDate);
 
-        _reportGenerator.Received(1).GenerateHistory(_sut.DrinkHistory, DateTime.Today);
+        _reportGenerator.Received(1).GenerateHistoryReport(_sut.DrinkHistory, requestedDate);
+    }
+    
+    [Fact]
+    public void PrintSalesSummary_ShouldCallReportGeneratorGenerateHistory_WhenDateIsGiven()
+    {
+        var requestedDate = DateTime.Today;
+        _sut.PrintSalesSummary(requestedDate);
+
+        _reportGenerator.Received(1).GenerateSummaryReport(_sut.DrinkHistory, requestedDate);
     }
 }
