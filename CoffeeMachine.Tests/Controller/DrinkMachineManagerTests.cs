@@ -3,6 +3,7 @@ using CoffeeMachine.Code.Controller;
 using CoffeeMachine.Code.Models;
 using CoffeeMachine.Code.Services;
 using NSubstitute;
+using NSubstitute.ReceivedExtensions;
 using Xunit;
 
 namespace CoffeeMachine.Tests.Controller;
@@ -16,10 +17,11 @@ public class DrinkMachineManagerTests
     private readonly IDrinkMaker _drinkMaker = Substitute.For<IDrinkMaker>();
     private readonly IReportGenerator _reportGenerator = Substitute.For<IReportGenerator>();
     private readonly IBeverageQuantityChecker _quantityChecker = Substitute.For<IBeverageQuantityChecker>();
+    private readonly IEmailNotifier _emailNotifier = Substitute.For<IEmailNotifier>();
 
     public DrinkMachineManagerTests()
     {
-        _sut = new DrinkMachineManager(_catalog, _protocolBuilder, _drinkMaker, _reportGenerator, _quantityChecker);
+        _sut = new DrinkMachineManager(_catalog, _protocolBuilder, _drinkMaker, _reportGenerator, _quantityChecker, _emailNotifier);
         _drinkOrder = new DrinkOrder(DrinkType.Coffee, 2, false);
     }
 
@@ -80,7 +82,6 @@ public class DrinkMachineManagerTests
         _drinkMaker.Received(1).SendCommand(expectedMessage);
     }
 
-    // Integration tests:
     [Theory]
     [InlineData(DrinkType.Coffee, 2, "C:2:1")]
     [InlineData(DrinkType.HotChocolate, 0, "H:0:0")]
@@ -90,7 +91,7 @@ public class DrinkMachineManagerTests
         var drink = new DrinkOrder(drinkType, sugar, false);
         var catalog = new DrinksCatalog();
         var builder = new ProtocolBuilder();
-        var sut = new DrinkMachineManager(catalog, builder, _drinkMaker, _reportGenerator);
+        var sut = new DrinkMachineManager(catalog, builder, _drinkMaker, _reportGenerator, _quantityChecker, _emailNotifier);
 
         sut.ManageDrinkOrder(drink, 10m);
         
@@ -106,7 +107,7 @@ public class DrinkMachineManagerTests
         var drink = new DrinkOrder(drinkType, sugar, true);
         var catalog = new DrinksCatalog();
         var builder = new ProtocolBuilder();
-        var sut = new DrinkMachineManager(catalog, builder, _drinkMaker, _reportGenerator);
+        var sut = new DrinkMachineManager(catalog, builder, _drinkMaker, _reportGenerator, _quantityChecker, _emailNotifier);
 
         sut.ManageDrinkOrder(drink, 10m);
         
@@ -118,7 +119,7 @@ public class DrinkMachineManagerTests
     {
         var drink = new DrinkOrder(DrinkType.OrangeJuice, 2, true);
         var catalog = new DrinksCatalog();
-        var sut = new DrinkMachineManager(catalog, _protocolBuilder, _drinkMaker, _reportGenerator);
+        var sut = new DrinkMachineManager(catalog, _protocolBuilder, _drinkMaker, _reportGenerator, _quantityChecker, _emailNotifier);
         var message = "Can't make a hot orange juice";
         _protocolBuilder.BuildMessageCommand(Arg.Any<string>()).Returns(message);
 
@@ -170,5 +171,17 @@ public class DrinkMachineManagerTests
         _sut.ManageDrinkOrder(_drinkOrder, 10m);
         
         _drinkMaker.Received(1).SendCommand(message);
+    }
+    
+    [Fact]
+    public void ManageDrinkOrder_ShouldSendEmail_WhenDrinkIsEmpty()
+    {
+        var sampleRecord = new CatalogRecord(DrinkType.Coffee, "A", 0m);
+        _catalog.QueryCatalog(Arg.Any<DrinkType>()).Returns(sampleRecord);
+        _quantityChecker.IsEmpty(Arg.Any<DrinkType>()).Returns(true);
+        
+        _sut.ManageDrinkOrder(_drinkOrder, 10m);
+
+        _emailNotifier.Received(1).NotifyMissingDrink(_drinkOrder.DrinkType);
     }
 }
