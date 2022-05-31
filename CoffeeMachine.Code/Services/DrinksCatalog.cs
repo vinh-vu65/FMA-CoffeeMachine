@@ -20,6 +20,6 @@ public class DrinksCatalog : IDrinksCatalog
     public CatalogRecord QueryCatalog(DrinkType drinkType)
     {
         return _catalog
-            .First(d => d.DrinkType == drinkType);
+            .Single(d => d.DrinkType == drinkType);
     }
 }
