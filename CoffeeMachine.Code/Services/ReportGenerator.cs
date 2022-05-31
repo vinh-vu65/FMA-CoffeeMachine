@@ -12,7 +12,7 @@ public class ReportGenerator : IReportGenerator
         output.Append("Drink\t\t\t\t\tTime");
         foreach (var (drinkOrder, dateTime, _) in drinkHistory.Where(d => d.Item2.Date == filterDate.Date))
         {
-            output.Append("\n" + AddSpaces(drinkOrder.ToString(), desiredStringLength)); 
+            output.Append("\n" + drinkOrder.ToString().PadRight(desiredStringLength)); 
             output.Append("\t" + dateTime.ToString("dddd, dd MMMM yyyy hh:mm tt"));
         }
 
@@ -29,7 +29,7 @@ public class ReportGenerator : IReportGenerator
         output.Append("Drink\t\tQuantity\tRevenue\n");
         foreach (var (drinkType, quantity, revenue) in salesSummary)
         {
-            output.Append(AddSpaces(drinkType.ToString(), desiredStringLength) + "\t");
+            output.Append(drinkType.ToString().PadRight(desiredStringLength) + "\t");
             output.Append(quantity + "\t\t");
             output.Append(revenue + "\n");
         }
@@ -51,10 +51,4 @@ public class ReportGenerator : IReportGenerator
     }
 
     public decimal CalculateTotalRevenue(List<SummaryReportLine> salesSummary) => salesSummary.Sum(x => x.Revenue);
-    
-    private string AddSpaces(string s, int length)
-    {
-        var difference = length - s.Length;
-        return s + new string(' ', difference);
-    }
 }
