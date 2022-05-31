@@ -4,6 +4,6 @@ namespace CoffeeMachine.Code.Services;
 
 public interface IReportGenerator
 {
-    string GenerateHistoryReport(List<(DrinkOrder, DateTime, decimal)> drinkHistory, DateTime filterDate);
-    string GenerateSummaryReport(List<(DrinkOrder, DateTime, decimal)> drinkHistory, DateTime filterDate);
+    string GenerateHistoryReport(List<FulfilledDrinkOrder> drinkHistory, DateTime filterDate);
+    string GenerateSummaryReport(List<FulfilledDrinkOrder> drinkHistory, DateTime filterDate);
 }

@@ -9,7 +9,7 @@ namespace CoffeeMachine.Tests.Services;
 public class ReportGeneratorTests
 {
     private ReportGenerator _sut;
-    private List<(DrinkOrder, DateTime, decimal)> _sampleHistory;
+    private List<FulfilledDrinkOrder> _sampleHistory;
     private readonly DrinkOrder _coffee = new(DrinkType.Coffee, 2, false);
     private readonly DrinkOrder _tea = new(DrinkType.Tea, 2, false);
     private readonly DrinkOrder _hotChocolate = new(DrinkType.HotChocolate, 2, false);
@@ -18,11 +18,11 @@ public class ReportGeneratorTests
     public ReportGeneratorTests()
     {
         _sut = new ReportGenerator();
-        _sampleHistory = new List<(DrinkOrder, DateTime, decimal)>
+        _sampleHistory = new List<FulfilledDrinkOrder>
         {
-            (_coffee, DateTime.Now, 3m),
-            (_coffee, DateTime.Now, 3m),
-            (_coffee, DateTime.Now, 3m)
+            new(_coffee, DateTime.Now, 3m),
+            new(_coffee, DateTime.Now, 3m),
+            new(_coffee, DateTime.Now, 3m)
         };
     }
     
@@ -31,9 +31,9 @@ public class ReportGeneratorTests
     {
         var result = _sut.GenerateHistoryReport(_sampleHistory, DateTime.Today);
 
-        Assert.Contains(_sampleHistory[0].Item1.ToString(), result);
-        Assert.Contains(_sampleHistory[1].Item1.ToString(), result);
-        Assert.Contains(_sampleHistory[2].Item1.ToString(), result);
+        Assert.Contains(_sampleHistory[0].DrinkOrder.ToString(), result);
+        Assert.Contains(_sampleHistory[1].DrinkOrder.ToString(), result);
+        Assert.Contains(_sampleHistory[2].DrinkOrder.ToString(), result);
     }
     
     [Fact]
@@ -41,9 +41,9 @@ public class ReportGeneratorTests
     {
         var result = _sut.GenerateHistoryReport(_sampleHistory, DateTime.Today);
 
-        Assert.Contains(_sampleHistory[0].Item2.ToString("dddd, dd MMMM yyyy hh:mm tt"), result);
-        Assert.Contains(_sampleHistory[1].Item2.ToString("dddd, dd MMMM yyyy hh:mm tt"), result);
-        Assert.Contains(_sampleHistory[2].Item2.ToString("dddd, dd MMMM yyyy hh:mm tt"), result);
+        Assert.Contains(_sampleHistory[0].TimePurchased.ToString("dddd, dd MMMM yyyy hh:mm tt"), result);
+        Assert.Contains(_sampleHistory[1].TimePurchased.ToString("dddd, dd MMMM yyyy hh:mm tt"), result);
+        Assert.Contains(_sampleHistory[2].TimePurchased.ToString("dddd, dd MMMM yyyy hh:mm tt"), result);
     }
 
     [Fact]
@@ -51,9 +51,9 @@ public class ReportGeneratorTests
     {
         var result = _sut.GenerateHistoryReport(_sampleHistory, DateTime.MinValue);
         
-        Assert.DoesNotContain(_sampleHistory[0].Item1.ToString(), result);
-        Assert.DoesNotContain(_sampleHistory[1].Item1.ToString(), result);
-        Assert.DoesNotContain(_sampleHistory[2].Item1.ToString(), result);
+        Assert.DoesNotContain(_sampleHistory[0].DrinkOrder.ToString(), result);
+        Assert.DoesNotContain(_sampleHistory[1].DrinkOrder.ToString(), result);
+        Assert.DoesNotContain(_sampleHistory[2].DrinkOrder.ToString(), result);
     }
 
     [Fact]
@@ -61,7 +61,7 @@ public class ReportGeneratorTests
     {
         var expectedCoffeeQuantity = 3;
         var expectedTeaQuantity = 1;
-        _sampleHistory.Add((_tea, DateTime.Now, 10m));
+        _sampleHistory.Add(new FulfilledDrinkOrder(_tea, DateTime.Now, 10m));
 
         var result = _sut.CreateSalesSummary(_sampleHistory, DateTime.Today);
         
@@ -74,7 +74,7 @@ public class ReportGeneratorTests
     {
         var expectedCoffeeRevenue = 9;
         var expectedHotChocRevenue = 10;
-        _sampleHistory.Add((_hotChocolate, DateTime.Now, 10m));
+        _sampleHistory.Add(new FulfilledDrinkOrder(_hotChocolate, DateTime.Now, 10m));
 
         var result = _sut.CreateSalesSummary(_sampleHistory, DateTime.Today);
         
@@ -93,7 +93,7 @@ public class ReportGeneratorTests
     [Fact]
     public void CalculateTotalRevenue_ShouldReturnSumOfAllRevenue_WhenGivenSalesSummary()
     {
-        _sampleHistory.Add((_hotChocolate, DateTime.Now, 10m));
+        _sampleHistory.Add(new FulfilledDrinkOrder(_hotChocolate, DateTime.Now, 10m));
         var salesSummary = _sut.CreateSalesSummary(_sampleHistory, DateTime.Today);
         var expectedTotalRevenue = 19;
 

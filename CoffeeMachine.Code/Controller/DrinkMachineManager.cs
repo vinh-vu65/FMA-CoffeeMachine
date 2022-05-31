@@ -5,7 +5,7 @@ namespace CoffeeMachine.Code.Controller;
 
 public class DrinkMachineManager
 {
-    public List<(DrinkOrder, DateTime, decimal)> DrinkHistory { get; }
+    public List<FulfilledDrinkOrder> DrinkHistory { get; }
     private readonly IDrinksCatalog _catalog;
     private readonly IProtocolBuilder _protocolBuilder;
     private readonly IDrinkMaker _drinkMaker;
@@ -22,7 +22,7 @@ public class DrinkMachineManager
         _reportGenerator = reportGenerator;
         _quantityChecker = quantityChecker;
         _emailNotifier = emailNotifier;
-        DrinkHistory = new List<(DrinkOrder, DateTime, decimal)>();
+        DrinkHistory = new List<FulfilledDrinkOrder>();
     }
     
     public void ManageDrinkOrder(DrinkOrder drinkRequested, decimal moneyInserted)
@@ -52,7 +52,7 @@ public class DrinkMachineManager
             return;
         }
 
-        DrinkHistory.Add((drinkRequested, DateTime.Now, drinkInfo.Price));
+        DrinkHistory.Add(new FulfilledDrinkOrder(drinkRequested, DateTime.Now, drinkInfo.Price));
         _drinkMaker.SendCommand(_protocolBuilder.BuildDrinkCommand(drinkInfo.DrinkCode, drinkRequested));
     }
     
