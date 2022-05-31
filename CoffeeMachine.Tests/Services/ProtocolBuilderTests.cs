@@ -57,7 +57,7 @@ public class ProtocolBuilderTests
     [Theory]
     [InlineData(2)]
     [InlineData(1)]
-    public void BuildDrinkCommand_ShouldReturnStringEndingWithOne_WhenDrinkContainsSugar(int sugarQuantity)
+    public void BuildDrinkCommand_ShouldReturnStringEndingWithOneForStirStick_WhenDrinkContainsSugar(int sugarQuantity)
     {
         var drinkCode = "A";
         var drinkOrder = new DrinkOrder(DrinkType.Coffee, sugarQuantity, false);
@@ -68,7 +68,7 @@ public class ProtocolBuilderTests
     }
     
     [Fact]
-    public void BuildDrinkCommand_ShouldReturnStringEndingWithZero_WhenDrinkContainsNoSugar()
+    public void BuildDrinkCommand_ShouldReturnStringEndingWithZeroForNoStirStick_WhenDrinkContainsNoSugar()
     {
         var drinkCode = "A";
         var sugarQuantity = 0;
