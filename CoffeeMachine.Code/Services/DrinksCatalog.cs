@@ -12,13 +12,13 @@ public class DrinksCatalog : IDrinksCatalog
         {
             new(DrinkType.Coffee, "C", 5.5m),
             new(DrinkType.HotChocolate, "H", 6m),
-            new(DrinkType.Tea, "T", 4m)
+            new(DrinkType.Tea, "T", 4m),
+            new(DrinkType.OrangeJuice, "O", 4.5m)
         };
     }
 
     public CatalogRecord QueryCatalog(DrinkType drinkType)
     {
-        return _catalog
-            .First(d => d.DrinkType == drinkType);
+        return _catalog.Single(d => d.DrinkType == drinkType);
     }
 }
