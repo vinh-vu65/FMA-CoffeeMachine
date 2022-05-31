@@ -21,9 +21,9 @@ public class ReportGenerator : IReportGenerator
 
     public string GenerateSummaryReport(List<FulfilledDrinkOrder> drinkHistory, DateTime filterDate)
     {
-        var salesSummary = CreateSalesSummary(drinkHistory, filterDate);
+        var salesSummary = SalesHistoryAnalyser.CreateSalesSummary(drinkHistory, filterDate);
         var desiredStringLength = 15;
-        var totalRevenue = CalculateTotalRevenue(salesSummary);
+        var totalRevenue = SalesHistoryAnalyser.CalculateTotalRevenue(salesSummary);
         
         var output = new StringBuilder("\t  -- Sales Summary --\n");
         output.Append("Drink\t\tQuantity\tRevenue\n");
@@ -37,18 +37,4 @@ public class ReportGenerator : IReportGenerator
         output.Append($"\n\t\tTotal Revenue:  {totalRevenue}");
         return output.ToString();
     }
-
-    public List<SummaryReportLine> CreateSalesSummary(List<FulfilledDrinkOrder> drinkHistory, DateTime filterDate)
-    {
-        return drinkHistory
-            .Where(d => d.TimePurchased.Date == filterDate.Date)
-            .GroupBy(d => d.DrinkOrder.DrinkType)
-            .Select(d => 
-                new SummaryReportLine(d.Key, d.Count(), d.Sum(x => x.Price)))
-            .OrderByDescending(x => x.Quantity)
-            .ThenByDescending(x => x.Revenue)
-            .ToList();
-    }
-
-    public decimal CalculateTotalRevenue(List<SummaryReportLine> salesSummary) => salesSummary.Sum(x => x.Revenue);
 }
